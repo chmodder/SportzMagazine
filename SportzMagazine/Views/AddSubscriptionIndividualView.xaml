@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:SportzMagazine.ViewModels"
     xmlns:helpers="using:SportzMagazine.Helpers"
+    xmlns:data="using:SportzMagazine.Models"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -108,15 +109,23 @@
 
         <ListView Grid.Column="1" Grid.Row="1" Header="Submitted Application" ItemsSource="{Binding SubscriptionList}">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="data:IndividualSubscription">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Full name: "/>
-                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="Full Name: "/>
+                            <TextBlock Text="{Binding IndividualApplicant.Name}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Address: "/>
-                            <TextBlock Text="{Binding}" />
+                            <TextBlock Text="{Binding IndividualApplicant.Address}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Email address: "/>
+                            <TextBlock Text="{Binding IndividualApplicant.EmailAddress}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Phone number: "/>
+                            <TextBlock Text="{Binding IndividualApplicant.PhoneNumber}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Number of copies: "/>
@@ -130,6 +139,30 @@
                             <TextBlock Text="Expiration date: "/>
                             <TextBlock Text="{Binding ExpirationDate}" />
                         </StackPanel>
+                        <ListView Header="Creditcard info" ItemsSource="{Binding IndividualApplicant.CreditCardList}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Creditcard type: "/>
+                                            <TextBlock Text="{Binding CardType}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Creditcard number: "/>
+                                            <TextBlock Text="{Binding CardNumber}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Creditcardholders name: "/>
+                                            <TextBlock Text="{Binding CardHolderName}" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Creditcard exp. date: "/>
+                                            <TextBlock Text="{Binding ExpirationDate}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

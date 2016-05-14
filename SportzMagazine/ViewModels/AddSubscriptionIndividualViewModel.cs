@@ -91,8 +91,10 @@ namespace SportzMagazine.ViewModels
         #region Properties
         public RelayCommand SubmitApplication { get; set; }
         
+        //Set the minimum year in the DatePicker xaml controls
         public DateTime MinDate { get { return DateTime.Now; } }
 
+        //Set the maximum year in the DatePicker xaml controls
         public DateTime MaxDate { get { return DateTime.Now.AddYears(3); }}
 
         public ObservableCollection<Subscription> SubscriptionList
@@ -102,6 +104,19 @@ namespace SportzMagazine.ViewModels
             {
                 _subscriptionList = value;
                 OnPropertyChanged("SubscriptionList");
+            }
+        }
+        public SubscriptionCatalog Sc1
+        {
+            get
+            {
+                return _sc1;
+            }
+
+            set
+            {
+                _sc1 = value;
+                OnPropertyChanged("Sc1");
             }
         }
 
@@ -134,8 +149,6 @@ namespace SportzMagazine.ViewModels
                 OnPropertyChanged("Address");
             }
         }
-
-
 
         public string PhoneNumber
         {
@@ -262,20 +275,6 @@ namespace SportzMagazine.ViewModels
             {
                 _creditCardExpirationDate = value;
                 OnPropertyChanged("CreditCardExpirationDate");
-            }
-        }
-
-        public SubscriptionCatalog Sc1
-        {
-            get
-            {
-                return _sc1;
-            }
-
-            set
-            {
-                _sc1 = value;
-                OnPropertyChanged("Sc1");
             }
         }
 
