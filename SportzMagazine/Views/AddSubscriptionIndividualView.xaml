@@ -17,6 +17,12 @@
     </Page.DataContext>
 
 
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Accept" Content="Submit Application" Label="Submit" Command="{Binding SubmitApplication}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
         <Grid.ColumnDefinitions>
@@ -34,23 +40,23 @@
         <StackPanel Grid.Column="0" Grid.Row="1">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Full name"/>
-                <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+                <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Address"/>
-                <TextBox Text="{Binding Address, Mode=TwoWay}"/>
+                <TextBox InputScope="EmailNameOrAddress" Text="{Binding Address, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Email address"/>
-                <TextBox Text="{Binding EmailAddress, Mode=TwoWay}"/>
+                <TextBox InputScope="EmailNameOrAddress" Text="{Binding EmailAddress, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Phone number"/>
-                <TextBox Text="{Binding PhoneNumber, Mode=TwoWay}"/>
+                <TextBox InputScope="TelephoneNumber" Text="{Binding PhoneNumber, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Number of copies"/>
-                <TextBox Text="{Binding NumberOfCopies, Mode=TwoWay}"/>
+                <TextBox InputScope="Number" Text="{Binding NumberOfCopies, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Subscription start date"/>
@@ -84,11 +90,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Creditcardholders name"/>
-                <TextBox Text="{Binding CreditCardHolderName, Mode=TwoWay}"/>
+                <TextBox InputScope="EmailNameOrAddress" Text="{Binding CreditCardHolderName, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Creditcard number"/>
-                <TextBox Text="{Binding CreditCardNumber, Mode=TwoWay}"/>
+                <TextBox InputScope="Number" Text="{Binding CreditCardNumber, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Creditcard Expiration date"/>
@@ -98,11 +104,7 @@
                     MaxYear="{Binding MaxDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
                     Date="{Binding CreditCardExpirationDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
             </StackPanel>
-            <Button Content="Submit Application" Command="{Binding SubmitApplication}"/>
         </StackPanel>
-
-        <!--Test TextBox for Binding test-->
-        <!--<TextBlock Text="{Binding NumberOfCopies}" Grid.Column="1" Grid.Row="1"/>-->
 
         <ListView Grid.Column="1" Grid.Row="1" Header="Submitted Application" ItemsSource="{Binding SubscriptionList}">
             <ListView.ItemTemplate>

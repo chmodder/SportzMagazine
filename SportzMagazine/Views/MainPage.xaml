@@ -1,0 +1,36 @@
+﻿<Page
+    x:Class="SportzMagazine.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SportzMagazine.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converter="using:System.Conv"
+    mc:Ignorable="d">
+ 
+    
+
+    <Page.TopAppBar>
+
+        <CommandBar Name="NavMenu">
+            <CommandBar.Content>
+                <StackPanel Orientation="Horizontal">
+                    <AppBarButton Icon="Home" Click="AppBarHomeBtn_Click"/>
+                    <AppBarButton Icon="Back" Click="AppBarBackBtn_Click" />
+                    <AppBarButton Icon="Forward" Click="AppBarForwardBtn_Click"  />
+                    <AppBarSeparator/>
+                </StackPanel>
+            </CommandBar.Content>
+            <!--Label will show even if collapsed. Workaround solution on webblog below didn't work-->
+            <!-- http://www.rudyhuyn.com/blog/2015/12/23/display-an-appbarbutton-on-the-left-side-of-a-commandbar/ -->
+            <AppBarButton Icon="AddFriend" Label="Subscribe" Click="AppBarSubscribeBtn_Click"  />
+            <AppBarButton Icon="Contact" Label="Subscriber" />
+            <AppBarButton Icon="Admin" Label="Subscription Clerk" />
+        </CommandBar>
+    </Page.TopAppBar>
+
+
+    <Frame Name="MainFrame"/>
+
+
+</Page>
