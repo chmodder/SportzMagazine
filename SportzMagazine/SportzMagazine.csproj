@@ -97,6 +97,7 @@
     </Compile>
     <Compile Include="Catalogs\SubscriptionCatalog.cs" />
     <Compile Include="Helpers\DateTimeToDateTimeOffsetConverter.cs" />
+    <Compile Include="Helpers\ReadWriteToFile.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Models\Applicant.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />

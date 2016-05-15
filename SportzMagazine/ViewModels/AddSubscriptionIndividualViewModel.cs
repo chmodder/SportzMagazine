@@ -8,13 +8,19 @@ using SportzMagazine.Models;
 using SportzMagazine.Views;
 using SportzMagazine.Catalogs;
 using SportzMagazine.Helpers;
+using System.IO;
+using System.Runtime.Serialization;
+using Windows.Storage;
 
 namespace SportzMagazine.ViewModels
 {
+    [DataContract]
     public class AddSubscriptionIndividualViewModel : BaseViewModel
     {
         #region Instance Fields
+        [DataMember]
         private SubscriptionCatalog _sc1;
+        [DataMember]
         private ObservableCollection<Subscription> _subscriptionList;
         private string _errorMessage;
         private string _name;
@@ -44,10 +50,10 @@ namespace SportzMagazine.ViewModels
         }
 
         #region Methods
-        public void AddNewSubscription(object obj)
+        public async void AddNewSubscription(object obj)
         {
             ExpirationDate = StartDate.AddMonths(Duration);
-            
+
             string name = Name;
             string address = Address;
             string emailAddress = EmailAddress;
@@ -63,7 +69,7 @@ namespace SportzMagazine.ViewModels
 
             //Validate needs implementation (should validate input from textboxes)
             if (true)
-            {             
+            {
                 //Create new subscription
                 Subscription s1 = Sc1.CreateNewSubscription(
                     name,
@@ -80,22 +86,30 @@ namespace SportzMagazine.ViewModels
 
                 //Adds the Subscription object to the observablecollection
                 SubscriptionList.Add(s1);
+
+                //serializes objects to xml
+                ReadWriteToFile.WriteToXmlFile(s1);
+
+                //serializes objects to json
+                await ReadWriteToFile.WriteJsonAsyncFile(s1);
+
             }
             else
             {
                 ErrorMessage = "System was unable to process your input. Please check your input, and try again.";
             }
         }
+
         #endregion
 
         #region Properties
         public RelayCommand SubmitApplication { get; set; }
-        
+
         //Set the minimum year in the DatePicker xaml controls
         public DateTime MinDate { get { return DateTime.Now; } }
 
         //Set the maximum year in the DatePicker xaml controls
-        public DateTime MaxDate { get { return DateTime.Now.AddYears(3); }}
+        public DateTime MaxDate { get { return DateTime.Now.AddYears(3); } }
 
         public ObservableCollection<Subscription> SubscriptionList
         {
@@ -207,7 +221,7 @@ namespace SportzMagazine.ViewModels
 
             }
         }
-        
+
         public DateTime ExpirationDate
         {
             get

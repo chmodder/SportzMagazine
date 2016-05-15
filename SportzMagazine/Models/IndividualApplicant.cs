@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace SportzMagazine.Models
 {
+    [DataContract]
     public class IndividualApplicant : Applicant
     {
+        [DataMember]
         private string _name;
+        [DataMember]
         private List<CreditCard> _creditCardList;
 
         public List<CreditCard> CreditCardList
