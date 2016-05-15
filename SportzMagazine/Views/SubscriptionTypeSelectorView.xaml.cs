@@ -27,9 +27,13 @@ namespace SportzMagazine.Views
             this.InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void SelectIndividualBtn_OnClick(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(AddSubscriptionIndividualView));
+        }
+        private void SelectCorporateBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            //Frame.Navigate(typeof(AddSubscriptionCorporateView));
         }
     }
 }

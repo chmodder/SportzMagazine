@@ -8,6 +8,6 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="Sportz Magazine Startpage" Style="{StaticResource HeaderTextBlockStyle}"/>
+        <TextBlock Text="Sportz Magazine Startpage" HorizontalAlignment="Center" Style="{StaticResource HeaderTextBlockStyle}"/>
     </Grid>
 </Page>

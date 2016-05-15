@@ -30,7 +30,7 @@
     </Page.TopAppBar>
 
 
-    <Frame Name="MainFrame"/>
+    <Frame Name="MainFrame" Margin="10"/>
 
 
 </Page>

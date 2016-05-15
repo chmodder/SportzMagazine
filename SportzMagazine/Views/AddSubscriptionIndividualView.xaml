@@ -26,147 +26,209 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Text="Individual View" Style="{ThemeResource TitleTextBlockStyle}"/>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Subscribe Individual" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock Text="Enter your information and submit" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
+        </StackPanel>
 
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Full name"/>
-                <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Address"/>
-                <TextBox InputScope="EmailNameOrAddress" Text="{Binding Address, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Email address"/>
-                <TextBox InputScope="EmailNameOrAddress" Text="{Binding EmailAddress, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Phone number"/>
-                <TextBox InputScope="TelephoneNumber" Text="{Binding PhoneNumber, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Number of copies"/>
-                <TextBox InputScope="Number" Text="{Binding NumberOfCopies, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Subscription start date"/>
-                <DatePicker 
-                    MinYear="{Binding MinDate, 
-                    Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
-                    MaxYear="{Binding MaxDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
-                    Date="{Binding StartDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Duration of subscription"/>
-                <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Duration, Mode=TwoWay}">
-                    <ComboBox.Items>
-                        <!--<ComboBoxItem Content="01 month" />
-                        <ComboBoxItem Content="03 months" />-->
-                        <ComboBoxItem Content="12 months (1 years)" />
-                        <ComboBoxItem Content="24 months (2 years)" />
-                        <ComboBoxItem Content="36 months (3 years)" />
-                    </ComboBox.Items>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Creditcard Type"/>
-                <ComboBox SelectedValuePath="Content" SelectedValue="{Binding CreditCardType, Mode=TwoWay}">
-                    <ComboBox.Items>
-                        <ComboBoxItem Content="Visa" />
-                        <ComboBoxItem Content="Mastercard" />
-                        <ComboBoxItem Content="American Express" />
-                    </ComboBox.Items>
-                </ComboBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Creditcardholders name"/>
-                <TextBox InputScope="EmailNameOrAddress" Text="{Binding CreditCardHolderName, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Creditcard number"/>
-                <TextBox InputScope="Number" Text="{Binding CreditCardNumber, Mode=TwoWay}"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Creditcard Expiration date"/>
-                <DatePicker 
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel x:Name="PersonalAndPaymentInfoPnl" Margin="0,0,10,0" Orientation="Vertical">
+                    <StackPanel x:Name="PersonalInfoPnl" Margin="0,0,0,10" Padding="5" BorderBrush="Black" BorderThickness="3">
+                        <TextBlock Margin="0,0,0,5" Text="Personal information" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Full name"/>
+                            <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Address"/>
+                            <TextBox InputScope="EmailNameOrAddress" Text="{Binding Address, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Email address"/>
+                            <TextBox InputScope="EmailNameOrAddress" Text="{Binding EmailAddress, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Phone number"/>
+                            <TextBox InputScope="TelephoneNumber" Text="{Binding PhoneNumber, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel x:Name="PaymentInfoPnl" Margin="0,0,0,10" Padding="5" BorderBrush="Black" BorderThickness="3">
+                        <TextBlock Margin="0,0,0,5" Text="Payment information" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Creditcard Type"/>
+                            <ComboBox SelectedValuePath="Content" SelectedValue="{Binding CreditCardType, Mode=TwoWay}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Visa" />
+                                    <ComboBoxItem Content="Mastercard" />
+                                    <ComboBoxItem Content="American Express" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Creditcardholders name"/>
+                            <TextBox InputScope="EmailNameOrAddress" Text="{Binding CreditCardHolderName, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Creditcard number"/>
+                            <TextBox InputScope="Number" Text="{Binding CreditCardNumber, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                            <TextBlock Text="Creditcard Expiration date"/>
+                            <DatePicker 
                     MinYear="{Binding MinDate, 
                     Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
                     MaxYear="{Binding MaxDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
                     Date="{Binding CreditCardExpirationDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"/>
-            </StackPanel>
-        </StackPanel>
-
-        <ListView Grid.Column="1" Grid.Row="1" Header="Submitted Application" ItemsSource="{Binding SubscriptionList}">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="data:IndividualSubscription">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Full Name: "/>
-                            <TextBlock Text="{Binding IndividualApplicant.Name}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Address: "/>
-                            <TextBlock Text="{Binding IndividualApplicant.Address}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Email address: "/>
-                            <TextBlock Text="{Binding IndividualApplicant.EmailAddress}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Phone number: "/>
-                            <TextBlock Text="{Binding IndividualApplicant.PhoneNumber}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Number of copies: "/>
-                            <TextBlock Text="{Binding NumberOfCopies}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Start date: "/>
-                            <TextBlock Text="{Binding StartDate}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Expiration date: "/>
-                            <TextBlock Text="{Binding ExpirationDate}" />
-                        </StackPanel>
-                        <ListView Header="Creditcard info" ItemsSource="{Binding IndividualApplicant.CreditCardList}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Creditcard type: "/>
-                                            <TextBlock Text="{Binding CardType}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Creditcard number: "/>
-                                            <TextBlock Text="{Binding CardNumber}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Creditcardholders name: "/>
-                                            <TextBlock Text="{Binding CardHolderName}" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Creditcard exp. date: "/>
-                                            <TextBlock Text="{Binding ExpirationDate}" />
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
                     </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                </StackPanel>
+
+                <StackPanel x:Name="SubscriptionInfoPnl" Margin="0,0,10,0" Padding="5" BorderBrush="Black" BorderThickness="3">
+                    <TextBlock Margin="0,0,0,5" Text="Subscription information" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                        <TextBlock Text="Number of copies"/>
+                        <TextBox InputScope="Number" Text="{Binding NumberOfCopies, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                        <TextBlock Text="Subscription start date"/>
+                        <DatePicker 
+                    MinYear="{Binding MinDate, 
+                    Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
+                    MaxYear="{Binding MaxDate, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}" 
+                    Date="{Binding StartDate, Mode=TwoWay, Converter={StaticResource DateTimeToDateTimeOffsetConverter}}"
+                    />
+                    </StackPanel>
+                    <StackPanel Margin="0,0,0,5" Orientation="Vertical">
+                        <TextBlock Text="Duration of subscription"/>
+                        <ComboBox SelectedValuePath="Content" SelectedValue="{Binding Duration, Mode=TwoWay}">
+                            <ComboBox.Items>
+                                <!--<ComboBoxItem Content="01 month" />
+                        <ComboBoxItem Content="03 months" />-->
+                                <ComboBoxItem Content="12 months (1 years)" />
+                                <ComboBoxItem Content="24 months (2 years)" />
+                                <ComboBoxItem Content="36 months (3 years)" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="SubmittedInfoPnl" Padding="5">
+                    <TextBlock Text="Submitted info" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <ListView x:Name="SubmittedInfoLw" ItemsSource="{Binding SubscriptionList}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="data:IndividualSubscription">
+                                <StackPanel Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Full Name: "/>
+                                        <TextBlock Text="{Binding IndividualApplicant.Name}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Address: "/>
+                                        <TextBlock Text="{Binding IndividualApplicant.Address}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Email address: "/>
+                                        <TextBlock Text="{Binding IndividualApplicant.EmailAddress}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Phone number: "/>
+                                        <TextBlock Text="{Binding IndividualApplicant.PhoneNumber}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Number of copies: "/>
+                                        <TextBlock Text="{Binding NumberOfCopies}" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Start date: "/>
+                                        <TextBlock Text="{Binding StartDate}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Expiration date: "/>
+                                        <TextBlock Text="{Binding ExpirationDate}" />
+                                    </StackPanel>
+                                    <ListView Header="Creditcard info" ItemsSource="{Binding IndividualApplicant.CreditCardList}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Creditcard type: "/>
+                                                        <TextBlock Text="{Binding CardType}" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Creditcard number: "/>
+                                                        <TextBlock Text="{Binding CardNumber}" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Creditcardholders name: "/>
+                                                        <TextBlock Text="{Binding CardHolderName}" />
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Creditcard exp. date: "/>
+                                                        <TextBlock Text="{Binding ExpirationDate}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- This sets the StackPanels location in the Grid depending on the viewports size-->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowStates">
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.Row)" Value="0"/>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.Column)" Value="1"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.Row)" Value="0"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.Column)" Value="2"/>
+                        <Setter Target="PersonalAndPaymentInfoPnl.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.ColumnSpan)" Value="1"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.Row)" Value="1"/>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.Column)" Value="0"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.Row)" Value="2"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.Column)" Value="0"/>
+                        <Setter Target="PersonalAndPaymentInfoPnl.(Grid.ColumnSpan)" Value="3"/>
+                        <Setter Target="SubscriptionInfoPnl.(Grid.ColumnSpan)" Value="3"/>
+                        <Setter Target="SubmittedInfoPnl.(Grid.ColumnSpan)" Value="3"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
     </Grid>
 </Page>

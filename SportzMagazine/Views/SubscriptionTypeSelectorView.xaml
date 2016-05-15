@@ -8,15 +8,77 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel>
-            <Button Width="50px" Height="50px" Click="ButtonBase_OnClick">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Image Source="../Assets/StoreLogo.png"/>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-            <TextBlock Text="Individual"/>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel  Grid.Row="0">
+            <TextBlock Text="Subcribe" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock Text="Select subscription type" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
         </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel x:Name="IndividualSelectionPnl">
+                    <Button Click="SelectIndividualBtn_OnClick">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Image Source="../Assets/Individual-Square-310x310-Logo.jpg"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <TextBlock Text="Individual" HorizontalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel x:Name="CorporateSelectionPnl">
+                    <Button Click="SelectCorporateBtn_OnClick">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Image Source="../Assets/Corporate-Square-310x310-Logo.jpg"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <TextBlock Text="Corporate" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowStates">
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CorporateSelectionPnl.(Grid.Row)" Value="0"/>
+                        <Setter Target="CorporateSelectionPnl.(Grid.Column)" Value="1"/>
+                        <Setter Target="IndividualSelectionPnl.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="CorporateSelectionPnl.(Grid.ColumnSpan)" Value="1"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CorporateSelectionPnl.(Grid.Row)" Value="1"/>
+                        <Setter Target="CorporateSelectionPnl.(Grid.Column)" Value="0"/>
+                        <Setter Target="IndividualSelectionPnl.(Grid.ColumnSpan)" Value="2"/>
+                        <Setter Target="CorporateSelectionPnl.(Grid.ColumnSpan)" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
