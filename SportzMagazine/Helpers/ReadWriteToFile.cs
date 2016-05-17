@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SportzMagazine.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -13,15 +15,33 @@ namespace SportzMagazine.Helpers
 {
     public class ReadWriteToFile
     {
-        #region XML
-        public static async void WriteToXmlFile(object obj)
-        {
+        private string _fileName;
 
-            string fileName = "xml.txt";
+        public string FileName
+        {
+            get
+            {
+                return _fileName;
+            }
+
+            set
+            {
+                _fileName = value;
+            }
+        }
+
+        public ReadWriteToFile(string fileName)
+        {
+            this.FileName = fileName;
+        }
+
+        #region XML
+        public async void WriteToXmlFile(object obj)
+        {
 
             //Serializing the data option 1 - WORKS ok - writes the obj data to xml file
             using (Stream stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(
-                          fileName,
+                          this._fileName,
                           CreationCollisionOption.ReplaceExisting))
             {
                 DataContractSerializer serializer = new DataContractSerializer(obj.GetType());
@@ -29,34 +49,35 @@ namespace SportzMagazine.Helpers
             }
         }
 
-        public static async Task<object> ReadXMLAsync(string fileName)
+        public async Task<ObservableCollection<Subscription>> ReadXMLAsync()
         {
-            string content = String.Empty;
+            string content = string.Empty;
 
-            var myStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(fileName);
-            using (StreamReader reader = new StreamReader(myStream))
-            {
-                content = await reader.ReadToEndAsync();
-            }
-            return content;
+            ObservableCollection<Subscription> myCollection = new ObservableCollection<Subscription>();
+            var xmlSerializer = new DataContractSerializer(typeof(ObservableCollection<Subscription>));
+
+            var myStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(this._fileName);
+
+            myCollection = (ObservableCollection<Subscription>)xmlSerializer.ReadObject(myStream);
+
+            //using (StreamReader reader = new StreamReader(myStream))
+            //{
+            //    content = await reader.ReadToEndAsync();
+                
+            //}
+            return myCollection;
+
         }
         #endregion
+        /*
+        string content = String.Empty;
 
-        #region JSON
-        public static async Task WriteJsonAsyncFile(object obj)
-        {
-            // Notice that the write is ALMOST identical ... except for the serializer.
+            List<Car> myCars;
+            var jsonSerializer = new DataContractJsonSerializer(typeof(List<Car>));
 
-            string fileName = "json.txt";
+            var myStream = await ApplicationData.Current.LocalFolder.OpenStreamForReadAsync(JSONFILENAME);
 
-            using (Stream stream = await ApplicationData.Current.LocalFolder.OpenStreamForWriteAsync(
-                          fileName,
-                          CreationCollisionOption.ReplaceExisting))
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
-                serializer.WriteObject(stream, obj);
-            }            
-        }
-        #endregion
+            myCars = (List<Car>)jsonSerializer.ReadObject(myStream);
+        */
     }
 }

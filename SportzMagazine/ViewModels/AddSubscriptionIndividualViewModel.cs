@@ -11,6 +11,7 @@ using SportzMagazine.Helpers;
 using System.IO;
 using System.Runtime.Serialization;
 using Windows.Storage;
+using System.ComponentModel.DataAnnotations;
 
 namespace SportzMagazine.ViewModels
 {
@@ -22,7 +23,7 @@ namespace SportzMagazine.ViewModels
         private SubscriptionCatalog _sc1;
         [DataMember]
         private ObservableCollection<Subscription> _subscriptionList;
-        private string _errorMessage;
+        //private string _errorMessage;
         private string _name;
         private string _address;
         private string _emailAddress;
@@ -35,8 +36,11 @@ namespace SportzMagazine.ViewModels
         private string _creditCardHolderName;
         private int _creditCardNumber;
         private DateTime _creditCardExpirationDate;
+        //The instance field, which contain the filename to save the observablecollection subscription-catalog
+        private const string _scFileName = "subscriptions.xml";
         #endregion
 
+        #region Constructor
         public AddSubscriptionIndividualViewModel()
         {
             //Create SubscriptionCatalog because it depends on it 
@@ -47,11 +51,44 @@ namespace SportzMagazine.ViewModels
 
             //Create new observable collection
             SubscriptionList = new ObservableCollection<Subscription>();
+
+            #region testcode
+            //    //Goal is to get the saved subscriptionList from file (Deserialize) and set the instance field to its content
+            //    /////////////////////////////////////Under construction//////////////////////////////////////
+            //    try
+            //    {
+            //        GetTheObservableCollectionFromFile(_scFileName);
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+
+            //        //
+            //    }
+
+            //    ////////////////////////////////////////////////////////////////////////////////
+            #endregion
+        }
+        #endregion
+
+        private async void GetTheObservableCollectionFromFile(string _scFileName)
+        {
+            ReadWriteToFile fileHandler = new ReadWriteToFile(_scFileName);
+            Task<ObservableCollection<Subscription>> theTask = fileHandler.ReadXMLAsync();
+            ObservableCollection<Subscription> result = await theTask;
+
+            //Check if observableCollection file exists
+            if (result != null)
+            {
+                SubscriptionList = (ObservableCollection<Subscription>)result;
+            }
         }
 
         #region Methods
-        public async void AddNewSubscription(object obj)
+        public void AddNewSubscription(object obj)
         {
+
+
             ExpirationDate = StartDate.AddMonths(Duration);
 
             string name = Name;
@@ -68,6 +105,15 @@ namespace SportzMagazine.ViewModels
 
 
             //Validate needs implementation (should validate input from textboxes)
+            #region Validation testcode
+            //check all values
+            //Failed values creates errormessage
+            //Add failed messages to an observablecollection
+            //Update view to show failed messages
+            //If validation passes for all values
+            //then proceed to "if" scope
+            #endregion
+
             if (true)
             {
                 //Create new subscription
@@ -84,19 +130,30 @@ namespace SportzMagazine.ViewModels
                     creditCardNumber,
                     creditCardExpirationDate);
 
-                //Adds the Subscription object to the observablecollection
                 SubscriptionList.Add(s1);
 
-                //serializes objects to xml
-                ReadWriteToFile.WriteToXmlFile(s1);
 
-                //serializes objects to json
-                await ReadWriteToFile.WriteJsonAsyncFile(s1);
+                //////////////////////////////////Under construction///////////////////////////////////////
+                ////check if record exist in observablecollection
+                //if (!SubscriptionList.Contains(s1))
+                //{
+                //    //Adds the Subscription object to the observablecollection (if subscription doesn't exist in ObservableCollection)
+                //    SubscriptionList.Add(s1);
 
+                //    //serializes objects to xml
+                //    ReadWriteToFile fileHandler = new ReadWriteToFile(_scFileName);
+                //    fileHandler.WriteToXmlFile(SubscriptionList);
+                //}
+                //else
+                //{
+                //    //return Errormessage;
+                //    ErrorMessage = "The information is already in the system";
+                //}
+                /////////////////////////////////////////////////////////////////////////////////////////
             }
             else
             {
-                ErrorMessage = "System was unable to process your input. Please check your input, and try again.";
+                //ErrorMessage = "System was unable to process your input. Please check your input, and try again.";
             }
         }
 
@@ -106,10 +163,10 @@ namespace SportzMagazine.ViewModels
         public RelayCommand SubmitApplication { get; set; }
 
         //Set the minimum year in the DatePicker xaml controls
-        public DateTime MinDate { get { return DateTime.Now; } }
+        public DateTime MinDate => DateTime.Now;
 
         //Set the maximum year in the DatePicker xaml controls
-        public DateTime MaxDate { get { return DateTime.Now.AddYears(3); } }
+        public DateTime MaxDate => DateTime.Now.AddYears(3);
 
         public ObservableCollection<Subscription> SubscriptionList
         {
@@ -134,8 +191,9 @@ namespace SportzMagazine.ViewModels
             }
         }
 
-        public string ErrorMessage { get { return _errorMessage; } set { _errorMessage = value; OnPropertyChanged("ErrorMessage"); } }
+        //public string ErrorMessage { get { return _errorMessage; } set { _errorMessage = value; OnPropertyChanged("ErrorMessage"); } }
 
+        [Required(ErrorMessage = "Name is required.")]
         public string Name
         {
             get
@@ -150,6 +208,7 @@ namespace SportzMagazine.ViewModels
             }
         }
 
+        [Required(ErrorMessage = "Address is required.")]
         public string Address
         {
             get
@@ -164,6 +223,7 @@ namespace SportzMagazine.ViewModels
             }
         }
 
+        
         public string PhoneNumber
         {
             get
