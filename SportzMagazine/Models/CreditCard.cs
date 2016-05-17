@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SportzMagazine.Models
 {
-    [DataContract]
     public class CreditCard
     {
-        [DataMember]
         private string _cardType;
-        [DataMember]
         private int _cardNumber;
-        [DataMember]
         private string _cardHolderName;
-        [DataMember]
         private DateTime _expirationDate;
 
         public string CardType
