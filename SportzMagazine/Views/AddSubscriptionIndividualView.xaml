@@ -55,7 +55,9 @@
                         <TextBlock Margin="0,0,0,5" Text="Personal information" Style="{StaticResource SubtitleTextBlockStyle}"/>
                         <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                             <TextBlock Text="Full name"/>
-                            <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay}"/>
+                            <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="{Binding Errors[Name][0], UpdateSourceTrigger=PropertyChanged}" Foreground="Red" HorizontalAlignment="Right" />
+                            <TextBlock Text="{Binding MyMessage, UpdateSourceTrigger=PropertyChanged}" Foreground="Red" HorizontalAlignment="Right" />
                         </StackPanel>
                         <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                             <TextBlock Text="Address"/>
