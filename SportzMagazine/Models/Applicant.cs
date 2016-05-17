@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Serialization;
 
 namespace SportzMagazine.Models
 {
-    [DataContract]
     public class Applicant
     {
-        [DataMember]
         private string _address;
-        [DataMember]
         private string _emailAddress;
-        [DataMember]
         private string _phoneNumber;
 
         public Applicant(string address, string emailAddress, string phoneNumber)
