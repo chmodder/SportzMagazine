@@ -3,52 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SportzMagazine.Models
 {
+    [XmlInclude(typeof(Subscription))]
+    [XmlInclude(typeof(IndividualSubscription))]
     public class Subscription
     {
         private int _numberOfCopies;
         private DateTime _startDate;
         private DateTime _expirationDate;
 
-        public int NumberOfCopies
+        public Subscription()
         {
-            get
-            {
-                return _numberOfCopies;
-            }
-
-            set
-            {
-                _numberOfCopies = value;
-            }
-        }
-
-        public DateTime StartDate
-        {
-            get
-            {
-                return _startDate;
-            }
-
-            set
-            {
-                _startDate = value;
-            }
-        }
-
-        public DateTime ExpirationDate
-        {
-            get
-            {
-                return _expirationDate;
-            }
-
-            set
-            {
-                _expirationDate = value;
-            }
+            //This empty PARAMETERLESS constructor is required by the XmlSerialiser
         }
 
         public Subscription(int numberOfCopies, DateTime startDate,DateTime expirationDate)
@@ -57,5 +26,12 @@ namespace SportzMagazine.Models
             this.StartDate = startDate;
             this.ExpirationDate = expirationDate;
         }
+
+
+        public int NumberOfCopies { get { return _numberOfCopies; } set { _numberOfCopies = value; } }
+
+        public DateTime StartDate { get { return _startDate; } set { _startDate = value; } }
+
+        public DateTime ExpirationDate { get { return _expirationDate; } set { _expirationDate = value; } }
     }
 }
