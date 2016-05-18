@@ -56,8 +56,7 @@
                         <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                             <TextBlock Text="Full name"/>
                             <TextBox InputScope="PersonalFullName" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="{Binding Errors[Name][0], UpdateSourceTrigger=PropertyChanged}" Foreground="Red" HorizontalAlignment="Right" />
-                            <TextBlock Text="{Binding MyMessage, UpdateSourceTrigger=PropertyChanged}" Foreground="Red" HorizontalAlignment="Right" />
+
                         </StackPanel>
                         <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                             <TextBlock Text="Address"/>
@@ -140,19 +139,19 @@
                                 <StackPanel Orientation="Vertical">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Full Name: "/>
-                                        <TextBlock Text="{Binding IndividualApplicant.Name}"/>
+                                        <TextBlock Text="{Binding TheIndividualApplicant.Name}"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Address: "/>
-                                        <TextBlock Text="{Binding IndividualApplicant.Address}" />
+                                        <TextBlock Text="{Binding TheIndividualApplicant.Address}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Email address: "/>
-                                        <TextBlock Text="{Binding IndividualApplicant.EmailAddress}" />
+                                        <TextBlock Text="{Binding TheIndividualApplicant.EmailAddress}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Phone number: "/>
-                                        <TextBlock Text="{Binding IndividualApplicant.PhoneNumber}" />
+                                        <TextBlock Text="{Binding TheIndividualApplicant.PhoneNumber}" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Number of copies: "/>
@@ -166,7 +165,7 @@
                                         <TextBlock Text="Expiration date: "/>
                                         <TextBlock Text="{Binding ExpirationDate}" />
                                     </StackPanel>
-                                    <ListView Header="Creditcard info" ItemsSource="{Binding IndividualApplicant.CreditCardList}">
+                                    <ListView Header="Creditcard info" ItemsSource="{Binding TheIndividualApplicant.CreditCardList}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel>

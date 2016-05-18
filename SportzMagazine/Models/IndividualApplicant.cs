@@ -3,39 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SportzMagazine.Models
 {
+    [XmlInclude(typeof(IndividualApplicant))]
     public class IndividualApplicant : Applicant
     {
         private string _name;
         private List<CreditCard> _creditCardList;
 
-        public List<CreditCard> CreditCardList
+        public IndividualApplicant()
         {
-            get
-            {
-                return _creditCardList;
-            }
-
-            set
-            {
-                _creditCardList = value;
-            }
+            //This is PARAMETERLESS constructor is required by the XMLSerializeer
         }
 
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-
-            set
-            {
-                _name = value;
-            }
-        }
 
         public IndividualApplicant(
             string name, 
@@ -58,5 +40,9 @@ namespace SportzMagazine.Models
 
             CreditCardList.Add(cc1);
         }
+
+        public string Name { get { return _name; } set { _name = value; } }
+
+        public List<CreditCard> CreditCardList { get { return _creditCardList; } set { _creditCardList = value; } }
     }
 }
