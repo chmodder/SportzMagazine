@@ -98,6 +98,7 @@
     <Compile Include="Catalogs\SubscriptionCatalog.cs" />
     <Compile Include="Helpers\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Helpers\Serialization.cs" />
     <Compile Include="Models\Applicant.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Models\CreditCard.cs" />

@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SportzMagazine.Catalogs
 {
+    [XmlInclude(typeof(SubscriptionCatalog))]
     public class SubscriptionCatalog
     {
         private List<Subscription> _subscriptionList;
@@ -40,7 +42,7 @@ namespace SportzMagazine.Catalogs
 
         public SubscriptionCatalog()
         {
-            
+            //This is PARAMETERLESS constructor is required by the XMLSerializeer
         }
 
         public Subscription CreateNewSubscription(
