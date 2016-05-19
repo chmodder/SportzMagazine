@@ -78,6 +78,7 @@ namespace SportzMagazine.ViewModels
 
             //this might need some refatoring and cleanup - this line is needed to run the task and receive a result
             var result = await myTask;
+
             //Load and set the SubscriptionList value from file if it exists - Should only add Task.Result() to SubscriptionList if file exists
             if (myTask.IsCompleted)
             {
@@ -120,10 +121,11 @@ namespace SportzMagazine.ViewModels
                     SubscriptionList.Clear();
                     //... and then adds the latest item (The newly created Subscription) to the ObservableCollection list again
                     SubscriptionList.Add(s1);
+                    ErrorMessage = "Application is Saved";
                 }
                 else
                 {
-                    //Notify Subscription Applicant htat the submitted information already exists in the system
+                    //Notify Subscription Applicant that the submitted information already exists in the system
                     ErrorMessage = "The information is already in the system";
                 }
 
