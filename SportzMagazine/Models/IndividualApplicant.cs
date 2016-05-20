@@ -26,7 +26,7 @@ namespace SportzMagazine.Models
             string phoneNumber, 
             string creditCardType,
             string creditCardHolderName, 
-            int creditCardNumber, 
+            string creditCardNumber, 
             DateTime creditCardExpirationDate) : base(address,emailAddress,phoneNumber)
         {
             this.Name = name;

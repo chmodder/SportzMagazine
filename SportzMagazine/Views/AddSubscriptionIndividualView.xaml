@@ -12,6 +12,7 @@
 
     <Page.Resources>
         <helpers:DateTimeToDateTimeOffsetConverter x:Key="DateTimeToDateTimeOffsetConverter"/>
+        <helpers:NumberConverter x:Key="NumberConverter"/>
     </Page.Resources>
     <Page.DataContext>
         <vm:AddSubscriptionIndividualViewModel/>
@@ -106,7 +107,7 @@
                     <TextBlock Margin="0,0,0,5" Text="Subscription information" Style="{StaticResource SubtitleTextBlockStyle}"/>
                     <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                         <TextBlock Text="Number of copies"/>
-                        <TextBox InputScope="Number" Text="{Binding NumberOfCopies, Mode=TwoWay}"/>
+                        <TextBox InputScope="Number" Text="{Binding NumberOfCopies, Mode=TwoWay, Converter={StaticResource NumberConverter}}"/>
                     </StackPanel>
                     <StackPanel Margin="0,0,0,5" Orientation="Vertical">
                         <TextBlock Text="Subscription start date"/>

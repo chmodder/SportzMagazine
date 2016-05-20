@@ -55,7 +55,7 @@ namespace SportzMagazine.Catalogs
             DateTime expirationDate,
             string creditCardType,
             string creditCardHolderName,
-            int creditCardNumber,
+            string creditCardNumber,
             DateTime creditCardExpirationDate)
         {
             //Creates new instances of the Applicant and Subscription lists

@@ -20,7 +20,7 @@ namespace SportzMagazine.Models
             //This empty PARAMETERLESS constructor is required by the XmlSerialiser
         }
 
-        public Subscription(int numberOfCopies, DateTime startDate,DateTime expirationDate)
+        public Subscription(int numberOfCopies, DateTime startDate, DateTime expirationDate)
         {
             this.NumberOfCopies = numberOfCopies;
             this.StartDate = startDate;
