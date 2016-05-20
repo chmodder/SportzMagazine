@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Automation.Peers;
 using SportzMagazine.Models;
 using SportzMagazine.Views;
 using SportzMagazine.Catalogs;
@@ -138,50 +139,57 @@ namespace SportzMagazine.ViewModels
                     creditCardExpirationDate);
 
 
-                //alternate check (Doesn't work either)
+                #region don't look if you value your eyes
+                //Ugly code to check if Subscription is already added to the list. Only checks if name matches.
+                //alternate check
                 bool alreadyExist = false;
 
+                //Cast s1
+                IndividualSubscription theNewSubscription = (IndividualSubscription)s1;//method argument1
 
                 for (int i = 0; i < SubscriptionList.Count(); i++)
                 {
-                    if (SubscriptionList[i].Equals(s1))
+                    if (SubscriptionList[i].GetType() == typeof(IndividualSubscription))
                     {
-                        alreadyExist = SubscriptionList[i].Equals(s1);
-                        break;
+                        IndividualSubscription item = (IndividualSubscription)SubscriptionList[i];
+
+                        if (item.TheIndividualApplicant.Name == theNewSubscription.TheIndividualApplicant.Name)
+                        {
+                            alreadyExist = true;
+                            break;
+                        }
                     }
                 }
+                #endregion
+
+                //If Subscription is not in the list ("Contains" not working). Probably because it checks for reference equality instead of value equality
+                //if (!SubscriptionList.Contains(s1))
+                if (!alreadyExist)
+                {
+                    //Adds the Subscription object to the observablecollection before sreializing/saving to file
+                    SubscriptionList.Add(s1);
 
 
-                if (SubscriptionList.Contains(s1))
+                    #region Serialization process
+                    //Creates Serialization object
+                    Serialization writeFile = new Serialization(FileName);
+                    //Serialization object save the updated Subscription List to a file
+                    writeFile.SaveSubscriptionsAsXmkAsync(SubscriptionList);
+                    #endregion
 
 
-                    //If Subscription is not in the list ("Contains" not working). Probably because it checks for reference equality instead of value equality
-                    //if (!SubscriptionList.Contains(s1))
-                    if (!alreadyExist)
-                    {
-                        //Adds the Subscription object to the observablecollection before sreializing/saving to file
-                        SubscriptionList.Add(s1);
-
-
-                        #region Serialization process
-                        //Creates Serialization object
-                        Serialization writeFile = new Serialization(FileName);
-                        //Serialization object save the updated Subscription List to a file
-                        writeFile.SaveSubscriptionsAsXmkAsync(SubscriptionList);
-                        #endregion
-
-
-                        //This part is cleaning the list after the data has been saved...
-                        SubscriptionList.Clear();
-                        //... and then adds the latest item (The newly created Subscription) to the ObservableCollection list again
-                        SubscriptionList.Add(s1);
-                        ErrorMessage = "Application is Saved";
-                    }
-                    else
-                    {
-                        //Notify Subscription Applicant that the submitted information already exists in the system
-                        ErrorMessage = "The information is already in the system";
-                    }
+                    //This part is cleaning the list after the data has been saved...
+                    SubscriptionList.Clear();
+                    //... and then adds the latest item (The newly created Subscription) to the ObservableCollection list again
+                    SubscriptionList.Add(s1);
+                    ErrorMessage = "Application is Saved";
+                }
+                else
+                {
+                    SubscriptionList.Clear();
+                    //Notify Subscription Applicant that the submitted information already exists in the system
+                    ErrorMessage = "The information is already in the system";
+                }
 
 
 
@@ -189,7 +197,7 @@ namespace SportzMagazine.ViewModels
             }
             else
             {
-                ErrorMessage = "System was unable to process your input. Please check your input, and try again.\n" + ErrorMessage;
+                ErrorMessage = "System was unable to validate your input. Please check your input, and try again.\n" + ErrorMessage;
             }
         }
 
