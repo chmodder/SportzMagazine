@@ -11,9 +11,12 @@ namespace SportzMagazine.Catalogs
     [XmlInclude(typeof(SubscriptionCatalog))]
     public class SubscriptionCatalog
     {
+        #region Instance Fields
         private List<Subscription> _subscriptionList;
         private List<Applicant> _applicantList;
+        #endregion
 
+        #region Properties
         public List<Subscription> SubscriptionList
         {
             get
@@ -39,12 +42,16 @@ namespace SportzMagazine.Catalogs
                 _applicantList = value;
             }
         }
+        #endregion
 
+        #region Constructors
         public SubscriptionCatalog()
         {
             //This is PARAMETERLESS constructor is required by the XMLSerializeer
         }
+        #endregion
 
+        #region methods
         public Subscription CreateNewSubscription(
             string name,
             string address,
@@ -73,5 +80,75 @@ namespace SportzMagazine.Catalogs
             //returns the Subscription object to the ViewModel's AddNewSubscription method from where it was invoked
             return s1;
         }
+
+        #region Static methods
+        /// <summary>
+        /// Checks if a Subscription object is inside a List of Subscriptions
+        /// </summary>
+        /// <param name="newSubscription"></param>
+        /// <param name="subscriptionList"></param>
+        /// <returns></returns>
+        internal static bool IsInSubscriptionList(Subscription newSubscription, List<Subscription> subscriptionList)
+        {
+            //sets the default return value
+            bool alreadyExist = false;
+
+            //checks if input arguments are null and returns false if thats the case, because comparision of null values are not
+            if (newSubscription == null || subscriptionList == null)
+            {
+                return alreadyExist;
+            }
+
+            //if newSubscription is an Individual Subscription check if newSubscription proprties match an item in the subscriptionList
+            if (newSubscription.GetType() == typeof(IndividualSubscription))
+            {
+                IndividualSubscription theSubscription = (IndividualSubscription)newSubscription;
+
+                for (int i = 0; i < subscriptionList.Count(); i++)
+                {
+                    if (subscriptionList[i].GetType() == typeof(IndividualSubscription))
+                    {
+                        //casts the subscriptionList item to IndividualSubscription
+                        IndividualSubscription item = (IndividualSubscription)subscriptionList[i];
+
+                        //if object-properties values are the same, we assume the objects are the same (more properties should probably be checked), and return true because the object is in the list
+                        if (item.TheIndividualApplicant.Name == theSubscription.TheIndividualApplicant.Name)
+                        {
+                            alreadyExist = true;
+                            return alreadyExist;
+                        }
+                    }
+                }
+            }
+
+            #region Corporate subscription (Not done yet, project is also missing Corporate class for now)
+            ////if newSubscription is a corporate subscription check if newSubscription proprties match an item in the subscriptionList
+            //else if (newSubscription.GetType() == typeof(CorporateSubscription))
+            //{
+            //    CorporateSubscription theSubscription = (CorporateSubscription)newSubscription;
+
+            //    for (int i = 0; i < subscriptionList.Count(); i++)
+            //    {
+            //        if (subscriptionList[i].GetType() == typeof(CorporateSubscription))
+            //        {
+            //            CorporateSubscription item = (CorporateSubscription)subscriptionList[i];
+
+            //            if (item.TheCorporateApplicant.Name == theSubscription.TheCorporateApplicant.Name)
+            //            {
+            //                alreadyExist = true;
+            //                return alreadyExist;
+            //            }
+            //        }
+            //    }
+            //}
+            #endregion
+            
+            return alreadyExist;
+        }
+        #endregion
+
+        #endregion
     }
+
+
 }

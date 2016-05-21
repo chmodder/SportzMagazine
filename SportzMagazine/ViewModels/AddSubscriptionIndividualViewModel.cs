@@ -66,9 +66,6 @@ namespace SportzMagazine.ViewModels
             ErrorMessage = "";
 
 
-            //Calculates ExpirationDate based on Startdate and Duration
-            ExpirationDate = StartDate.AddMonths(Duration);
-
 
             string name = Name;
             string address = Address;
@@ -76,28 +73,29 @@ namespace SportzMagazine.ViewModels
             string phoneNumber = PhoneNumber;
             int numberOfCopies = NumberOfCopies;
             DateTime startDate = StartDate;
+            int duration = Duration;
             DateTime expirationDate = ExpirationDate;
             string creditCardType = CreditCardType;
             string creditCardHolderName = CreditCardHolderName;
             string creditCardNumber = CreditCardNumber;
             DateTime creditCardExpirationDate = CreditCardExpirationDate;
-
-
-
-
+            
 
 
             //Validates variables created from the input
             #region Validation
             CustomValidation theValidation = new CustomValidation();
             bool inputIsValid = theValidation.IsValidIndividualSubscriptionInfo(name, address, emailAddress, phoneNumber, numberOfCopies,
-                startDate, creditCardHolderName, creditCardNumber);
+                startDate, duration, creditCardType, creditCardHolderName, creditCardNumber, creditCardExpirationDate);
 
 
             ErrorMessage += theValidation.ErrorMessagesToString().ToString();
             #endregion
 
+            //Calculates ExpirationDate based on Startdate and Duration
+            ExpirationDate = StartDate.AddMonths(Duration);
 
+            //Proceeds to deserialization of existing subscriptionlist if input is validated
             if (inputIsValid)
             {
                 #region  Deserialization process
@@ -142,27 +140,31 @@ namespace SportzMagazine.ViewModels
                 #region don't look if you value your eyes
                 //Ugly code to check if Subscription is already added to the list. Only checks if name matches.
                 //alternate check
-                bool alreadyExist = false;
+                //bool alreadyExist = false;
 
-                //Cast s1
-                IndividualSubscription theNewSubscription = (IndividualSubscription)s1;//method argument1
+                ////Cast s1
+                //IndividualSubscription theNewSubscription = (IndividualSubscription)s1;//method argument1
 
-                for (int i = 0; i < SubscriptionList.Count(); i++)
-                {
-                    if (SubscriptionList[i].GetType() == typeof(IndividualSubscription))
-                    {
-                        IndividualSubscription item = (IndividualSubscription)SubscriptionList[i];
+                //for (int i = 0; i < SubscriptionList.Count(); i++)
+                //{
+                //    if (SubscriptionList[i].GetType() == typeof(IndividualSubscription))
+                //    {
+                //        IndividualSubscription item = (IndividualSubscription)SubscriptionList[i];
 
-                        if (item.TheIndividualApplicant.Name == theNewSubscription.TheIndividualApplicant.Name)
-                        {
-                            alreadyExist = true;
-                            break;
-                        }
-                    }
-                }
+                //        if (item.TheIndividualApplicant.Name == theNewSubscription.TheIndividualApplicant.Name)
+                //        {
+                //            alreadyExist = true;
+                //            break;
+                //        }
+                //    }
+                //}
+
+
                 #endregion
 
                 //If Subscription is not in the list ("Contains" not working). Probably because it checks for reference equality instead of value equality
+                bool alreadyExist = SubscriptionCatalog.IsInSubscriptionList(s1, SubscriptionList.ToList());
+
                 //if (!SubscriptionList.Contains(s1))
                 if (!alreadyExist)
                 {

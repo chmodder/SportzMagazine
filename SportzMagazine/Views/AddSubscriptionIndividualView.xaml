@@ -35,9 +35,10 @@
         <StackPanel Grid.Row="0">
             <TextBlock Text="Subscribe Individual" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <TextBlock Text="Enter your information and submit" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaptionTextBlockStyle}" FontStyle="Italic" Foreground="Red"/>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

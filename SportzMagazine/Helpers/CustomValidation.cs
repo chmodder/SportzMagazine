@@ -33,53 +33,29 @@ namespace SportzMagazine.Helpers
 
 
         #region public methods
-        public bool IsValidIndividualSubscriptionInfo()
+
+        public bool IsValidIndividualSubscriptionInfo(
+            string name,
+            string address,
+            string emailAddress,
+            string phoneNumber,
+            int numberOfCopies,
+            DateTime startDate,
+            int duration, 
+            string cardType,
+            string cardHolderName,
+            string cardNumber,
+            DateTime cardExpirationDate)
         {
+            //Return value default is set
             bool result = true;
 
 
-
-
-            //Subscriptioninfo
-            IsValidatedList.Add(CheckNumberOfCopies(_theSubscriptionToBeValidated.NumberOfCopies));
-
-
-            //Subscriberinfo
-            IsValidatedList.Add(CheckName(_theSubscriptionToBeValidated.TheIndividualApplicant.Name));
-            IsValidatedList.Add(CheckAddress(_theSubscriptionToBeValidated.TheIndividualApplicant.Address));
-            IsValidatedList.Add(CheckEmail(_theSubscriptionToBeValidated.TheIndividualApplicant.EmailAddress));
-            IsValidatedList.Add(CheckPhoneNumber(_theSubscriptionToBeValidated.TheIndividualApplicant.PhoneNumber));
-
-
-
-
-            //creditcardinfo
-            IsValidatedList.Add(CheckName(_theSubscriptionToBeValidated.TheIndividualApplicant.CreditCardList[0].CardHolderName));
-            IsValidatedList.Add(CheckCreditCardNumber(_theSubscriptionToBeValidated.TheIndividualApplicant.CreditCardList[0].CardNumber));
-
-
-            //if all IndividualSubscription properties er true set allValidated to true
-            foreach (bool b in _isValidatedList)
-            {
-                if (b == false)
-                {
-                    result = false;
-                    break;
-                }
-            }
-
-
-            return result;
-        }
-        public bool IsValidIndividualSubscriptionInfo(string name, string address, string emailAddress, string phoneNumber, int numberOfCopies, DateTime startDate, string cardHolderName, string cardNumber)
-        {
-            bool result = true;
-
-
-
-
-            //Subscriptioninfo
+            //Subscriptioninfo          
+            IsValidatedList.Add(CheckStartdate(startDate));
             IsValidatedList.Add(CheckNumberOfCopies(numberOfCopies));
+            IsValidatedList.Add(CheckCreditcardDuration(duration));
+
 
 
             //Subscriberinfo
@@ -89,14 +65,15 @@ namespace SportzMagazine.Helpers
             IsValidatedList.Add(CheckPhoneNumber(phoneNumber));
 
 
-
-
             //creditcardinfo
-            IsValidatedList.Add(CheckName(cardHolderName));
+            IsValidatedList.Add(CheckCreditcardName(cardHolderName));
             IsValidatedList.Add(CheckCreditCardNumber(cardNumber));
+            IsValidatedList.Add(CheckCreditcardType(cardType));
+            IsValidatedList.Add(CheckCreditcardExpirationDate(cardExpirationDate));
 
 
-            //if all IndividualSubscription properties er true set allValidated to true
+
+            //if all IndividualSubscription properties er true set all, then result is set to true, which means the user input is valid
             foreach (bool b in _isValidatedList)
             {
                 if (b == false)
@@ -106,9 +83,27 @@ namespace SportzMagazine.Helpers
                 }
             }
 
-
             return result;
         }
+
+        private bool CheckCreditcardExpirationDate(DateTime cardExpirationDate)
+        {
+            //Sets the result (return value) to true or false depending if startDate has a value
+            bool result = false;
+
+            if (cardExpirationDate > DateTime.Today.AddDays(7))
+            {
+                result = true;
+                return result;
+            }
+
+            //sets the error
+            _errorMessageList.Add("The creditcard expiration date must be at least 1 week from today");
+
+            //return the result value
+            return result;
+        }
+
         public StringBuilder ErrorMessagesToString()
         {
             //Creates the string which should contain all items in the ErrorMessageList
@@ -118,25 +113,23 @@ namespace SportzMagazine.Helpers
             //If the ErrormessageList has items make a long string of all the errors with each item on a new line (by using "\n")
             if (ErrorMessageList.Count() != 0)
             {
-                string lastItem = ErrorMessageList.Last();
+                int lastItem = ErrorMessageList.Count() - 1;
 
 
-                foreach (string s in ErrorMessageList)
+                for (int i = 0; i < ErrorMessageList.Count(); i++)
                 {
                     //Adds an item to the string
-                    errorMessageString.Append(s);
-                    //adds comma separation between each item. If last item period is added.
-                    errorMessageString.Append(s != lastItem ? ",\n " : ".");
+                    errorMessageString.Append(ErrorMessageList[i]);
+                    //adds comma separation between each item. If it is the last item in the list, then a period is added.
+                    errorMessageString.Append(i != lastItem ? ",\n " : ".");
                 }
-
-
             }
             return errorMessageString;
         }
         #endregion
 
-
         #region private methods
+
         /// <summary>
         /// Checks if number of copies is a positive number and under 100. 
         /// </summary>
@@ -161,35 +154,71 @@ namespace SportzMagazine.Helpers
         //- rule parameter. eg. email which then import the email rules from another class called ValidationRules
 
 
-
-
-        //public bool CheckStartDate()
-        //{
-
-
-        //}
-
-
-        //public bool CheckNumberOfCopies(string numberOfCopies)
-        //{
-
-
-        //}
         #endregion
 
 
+        private bool CheckStartdate(DateTime startDate)
+        {
+            //Sets the result (return value) to true or false depending if startDate has a value
+            bool result = false;
+
+            if (startDate > DateTime.Today.AddDays(1))
+            {
+                result = true;
+                return result;
+            }
+
+            //sets the error
+            _errorMessageList.Add("The subscription start date can not be before tomorrow");
+
+            //return the result value
+            return result;
+        }
+
+        private bool CheckCreditcardType(string cardType)
+        {
+            //check if input is null or empty
+            if (cardType == null)
+            {
+                _errorMessageList.Add("Credit card type is not set");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool CheckCreditcardDuration(int duration)
+        {
+            bool isNotZero = duration > 0;
+
+            //Adds an error message to the list if duration is not set ("isNotZero" is false)
+            if (!isNotZero)
+            {
+                _errorMessageList.Add("Duration is not set");
+            }
+
+            return isNotZero;
+        }
+
         private bool CheckName(string name)
         {
+            //check if input is null or empty
+            if (name == null)
+            {
+                _errorMessageList.Add("A girl or a man has no name");
+                return false;
+            }
+
             //Check if input match validation rules for Name
             //if Name is validated flag true
             //else flag false
-            bool isNameLengthMin = name.Length >= 2 || name.Length != 0;
+            bool isNameLengthMin = name.Length >= 2 && name.Length != 0;
 
 
             //Adds an errormessage to the list if name rules does not match input
             if (!isNameLengthMin)
             {
-                _errorMessageList.Add("Name is too short");
+                _errorMessageList.Add("A girl or a man's name is too short");
             }
             return isNameLengthMin;
         }
@@ -197,6 +226,12 @@ namespace SportzMagazine.Helpers
 
         private bool CheckAddress(string address)
         {
+            if (address == null)
+            {
+                _errorMessageList.Add("Address field is empty");
+                return false;
+            }
+
             //Check if input match validation rules for Address
             //if Name is validated flag true
             //else flag false
@@ -214,6 +249,12 @@ namespace SportzMagazine.Helpers
 
         private bool CheckEmail(string emailAddress)
         {
+            if (emailAddress == null)
+            {
+                _errorMessageList.Add("Email field is empty");
+                return false;
+            }
+
             //Check if input match validation rules for Email
             //if Name is validated flag true
             //else flag false
@@ -238,6 +279,12 @@ namespace SportzMagazine.Helpers
 
         private bool CheckPhoneNumber(string number)
         {
+            if (number == null)
+            {
+                _errorMessageList.Add("Phone number is empty");
+                return false;
+            }
+
             //output variable as integer from int.Parse
             int intNumber;
             //Tries to parse the string to integer and sets the boolean value according to its succes in parsing the string
@@ -254,17 +301,50 @@ namespace SportzMagazine.Helpers
             //Adds an errormessage to the errormessagelist if the input is not a phonenumber
             if (!isDkPhoneNumber)
             {
-                _errorMessageList.Add("The phone number must be 8 characters and not contain countrycode");
+                _errorMessageList.Add("Phone number must be 8 characters and not contain countrycode");
             }
             return isDkPhoneNumber;
         }
 
 
 
+        private bool CheckCreditcardName(string cardHolderName)
+        {
+
+            bool creditCardNameIsValid = false;
+            string errorMsg = "(Cardholders name field)";
+
+            //check if input is null or empty
+            if (cardHolderName == null)
+            {
+                errorMsg = string.Format("A girl or a man has no name {0}", errorMsg);
+                _errorMessageList.Add(errorMsg);
+                return creditCardNameIsValid;
+            }
+
+            //Check if input match validation rules for Name
+            //if Name is validated flag true
+            //else flag false
+            creditCardNameIsValid = cardHolderName.Length >= 2 && cardHolderName.Length != 0;
+
+            //Adds an errormessage to the list if name rules does not match input
+            if (!creditCardNameIsValid)
+            {
+                errorMsg = string.Format("A girl or a man's name is too short {0}", errorMsg);
+                _errorMessageList.Add(errorMsg);
+            }
+
+
+            return creditCardNameIsValid;
+        }
 
         private bool CheckCreditCardNumber(string cardnumber)
         {
-
+            if (cardnumber == null)
+            {
+                _errorMessageList.Add("Credit card number is empty");
+                return false;
+            }
 
             //checks if number consists of exactly 8 characters
             bool isRightNumberLenght = cardnumber.Length == 16;
@@ -283,7 +363,6 @@ namespace SportzMagazine.Helpers
 
         //CreditCardExpirationDate, SubscriptionDuration and SubscriptionStartDate are not validated since the values should be predefined in the right format comboboxes. 
         #endregion
-
 
         #region properties
         public IndividualSubscription TheSubscriptionToBeValidated
