@@ -20,17 +20,12 @@ namespace SportzMagazine.Helpers
         private List<string> _errorMessageList;
         #endregion
 
-
         public CustomValidation()
         {
-
-
             _isValidatedList = new List<bool>();
-
 
             _errorMessageList = new List<string>();
         }
-
 
         #region public methods
 
@@ -86,7 +81,15 @@ namespace SportzMagazine.Helpers
             return result;
         }
 
-        public bool IsValidCorporateSubscriptionInfo(string contactName, string jobTitle, string address, string emailAddress, string phoneNumber, int numberOfCopies, DateTime startDate, int duration)
+        public bool IsValidCorporateSubscriptionInfo(
+            string contactName, 
+            string jobTitle, 
+            string address, 
+            string emailAddress, 
+            string phoneNumber, 
+            int numberOfCopies, 
+            DateTime startDate, 
+            int duration)
         {
             //Return value default is set
             bool result = true;
@@ -122,26 +125,7 @@ namespace SportzMagazine.Helpers
 
             return result;
         }
-
-
-        private bool CheckCreditcardExpirationDate(DateTime cardExpirationDate)
-        {
-            //Sets the result (return value) to true or false depending if startDate has a value
-            bool result = false;
-
-            if (cardExpirationDate > DateTime.Today.AddDays(7))
-            {
-                result = true;
-                return result;
-            }
-
-            //sets the error
-            _errorMessageList.Add("The creditcard expiration date must be at least 1 week from today");
-
-            //return the result value
-            return result;
-        }
-
+        
         public StringBuilder ErrorMessagesToString()
         {
             //Creates the string which should contain all items in the ErrorMessageList
@@ -168,6 +152,14 @@ namespace SportzMagazine.Helpers
 
         #region private methods
 
+        #region dev info
+        //A thought: this could maybe be refactored to have only one "checkItem" method with 2 parameters:
+        //- object parameter for the object that needs checking
+        //- rule parameter. eg. email which then import the email rules from another class called ValidationRules
+
+
+        #endregion
+
         /// <summary>
         /// Checks if number of copies is a positive number and under 100. 
         /// </summary>
@@ -184,16 +176,6 @@ namespace SportzMagazine.Helpers
 
             return isBetween0And100;
         }
-
-
-        #region dev info
-        //A thought: this could maybe be refactored to have only one "checkItem" method with 2 parameters:
-        //- object parameter for the object that needs checking
-        //- rule parameter. eg. email which then import the email rules from another class called ValidationRules
-
-
-        #endregion
-
 
         private bool CheckStartdate(DateTime startDate)
         {
@@ -261,7 +243,6 @@ namespace SportzMagazine.Helpers
             return isNameLengthMin;
         }
 
-
         private bool CheckJobTitle(string jobTitle)
         {
             if (jobTitle == null)
@@ -306,7 +287,6 @@ namespace SportzMagazine.Helpers
             return isAddressLengthMin;
         }
 
-
         private bool CheckEmail(string emailAddress)
         {
             if (emailAddress == null)
@@ -336,7 +316,6 @@ namespace SportzMagazine.Helpers
             return isEmail;
         }
 
-
         private bool CheckPhoneNumber(string number)
         {
             if (number == null)
@@ -365,8 +344,6 @@ namespace SportzMagazine.Helpers
             }
             return isDkPhoneNumber;
         }
-
-
 
         private bool CheckCreditcardName(string cardHolderName)
         {
@@ -418,10 +395,24 @@ namespace SportzMagazine.Helpers
             return isRightNumberLenght;
         }
 
+        private bool CheckCreditcardExpirationDate(DateTime cardExpirationDate)
+        {
+            //Sets the result (return value) to true or false depending if startDate has a value
+            bool result = false;
 
+            if (cardExpirationDate > DateTime.Today.AddDays(7))
+            {
+                result = true;
+                return result;
+            }
 
+            //sets the error
+            _errorMessageList.Add("The creditcard expiration date must be at least 1 week from today");
 
-        //CreditCardExpirationDate, SubscriptionDuration and SubscriptionStartDate are not validated since the values should be predefined in the right format comboboxes. 
+            //return the result value
+            return result;
+        }
+
         #endregion
 
         #region properties
