@@ -54,7 +54,7 @@ namespace SportzMagazine.Helpers
             //Subscriptioninfo          
             IsValidatedList.Add(CheckStartdate(startDate));
             IsValidatedList.Add(CheckNumberOfCopies(numberOfCopies));
-            IsValidatedList.Add(CheckCreditcardDuration(duration));
+            IsValidatedList.Add(CheckDuration(duration));
 
 
 
@@ -85,6 +85,44 @@ namespace SportzMagazine.Helpers
 
             return result;
         }
+
+        public bool IsValidCorporateSubscriptionInfo(string contactName, string jobTitle, string address, string emailAddress, string phoneNumber, int numberOfCopies, DateTime startDate, int duration)
+        {
+            //Return value default is set
+            bool result = true;
+
+
+            //Subscriptioninfo          
+            IsValidatedList.Add(CheckStartdate(startDate));
+            IsValidatedList.Add(CheckNumberOfCopies(numberOfCopies));
+            IsValidatedList.Add(CheckDuration(duration));
+
+
+
+            //Subscriberinfo
+            IsValidatedList.Add(CheckName(contactName));
+            IsValidatedList.Add(CheckJobTitle(jobTitle));
+            IsValidatedList.Add(CheckAddress(address));
+            IsValidatedList.Add(CheckEmail(emailAddress));
+            IsValidatedList.Add(CheckPhoneNumber(phoneNumber));
+
+            
+
+
+
+            //if all IndividualSubscription properties er true set all, then result is set to true, which means the user input is valid
+            foreach (bool b in _isValidatedList)
+            {
+                if (b == false)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
 
         private bool CheckCreditcardExpirationDate(DateTime cardExpirationDate)
         {
@@ -187,7 +225,7 @@ namespace SportzMagazine.Helpers
             return true;
         }
 
-        private bool CheckCreditcardDuration(int duration)
+        private bool CheckDuration(int duration)
         {
             bool isNotZero = duration > 0;
 
@@ -224,6 +262,28 @@ namespace SportzMagazine.Helpers
         }
 
 
+        private bool CheckJobTitle(string jobTitle)
+        {
+            if (jobTitle == null)
+            {
+                _errorMessageList.Add("Jobtitle field is empty");
+                return false;
+            }
+
+            //Check if input match validation rules for Address
+            //if Name is validated flag true
+            //else flag false
+            bool isJobTitleLengthMin = jobTitle.Length >= 2 && jobTitle.Length != 0;
+
+
+            //Adds an errormessage to the list if name rules does not match input
+            if (!isJobTitleLengthMin)
+            {
+                _errorMessageList.Add("Jobtitle is too short");
+            }
+            return isJobTitleLengthMin;
+        }
+
         private bool CheckAddress(string address)
         {
             if (address == null)
@@ -235,7 +295,7 @@ namespace SportzMagazine.Helpers
             //Check if input match validation rules for Address
             //if Name is validated flag true
             //else flag false
-            bool isAddressLengthMin = address.Length >= 2 || address.Length != 0;
+            bool isAddressLengthMin = address.Length >= 2 && address.Length != 0;
 
 
             //Adds an errormessage to the list if name rules does not match input
@@ -301,7 +361,7 @@ namespace SportzMagazine.Helpers
             //Adds an errormessage to the errormessagelist if the input is not a phonenumber
             if (!isDkPhoneNumber)
             {
-                _errorMessageList.Add("Phone number must be 8 characters and not contain countrycode");
+                _errorMessageList.Add("Phone number must be 8 characters and not contain symbols, letters or countrycode");
             }
             return isDkPhoneNumber;
         }

@@ -14,13 +14,14 @@ using SportzMagazine.Helpers;
 namespace SportzMagazine.ViewModels
 {
 
-    public class AddSubscriptionIndividualViewModel : BaseViewModel
+    public class AddSubscriptionCorporateViewModel : BaseViewModel
     {
         #region Instance Fields
         private SubscriptionCatalog _sc1;
         private ObservableCollection<Subscription> _subscriptionList;
         private string _errorMessage;
-        private string _name;
+        private string _contactName;
+        private string _jobTitle;
         private string _address;
         private string _emailAddress;
         private string _phoneNumber;
@@ -28,10 +29,6 @@ namespace SportzMagazine.ViewModels
         private DateTime _startDate;
         private int _duration;
         private DateTime _expirationDate;
-        private string _creditCardType;
-        private string _creditCardHolderName;
-        private string _creditCardNumber;
-        private DateTime _creditCardExpirationDate;
         private const string FileName = "Subscriptions.xml";
 
 
@@ -39,7 +36,7 @@ namespace SportzMagazine.ViewModels
 
 
         #region Constructors
-        public AddSubscriptionIndividualViewModel()
+        public AddSubscriptionCorporateViewModel()
         {
             //Create SubscriptionCatalog because it depends on it 
             Sc1 = new SubscriptionCatalog();
@@ -67,25 +64,22 @@ namespace SportzMagazine.ViewModels
 
 
 
-            string name = Name;
+            string contactName = ContactName;
+            string jobTitle = JobTitle;
             string address = Address;
             string emailAddress = EmailAddress;
             string phoneNumber = PhoneNumber;
             int numberOfCopies = NumberOfCopies;
             DateTime startDate = StartDate;
             int duration = Duration;
-            string creditCardType = CreditCardType;
-            string creditCardHolderName = CreditCardHolderName;
-            string creditCardNumber = CreditCardNumber;
-            DateTime creditCardExpirationDate = CreditCardExpirationDate;
             
 
 
             //Validates variables created from the input
             #region Validation
             CustomValidation theValidation = new CustomValidation();
-            bool inputIsValid = theValidation.IsValidIndividualSubscriptionInfo(name, address, emailAddress, phoneNumber, numberOfCopies,
-                startDate, duration, creditCardType, creditCardHolderName, creditCardNumber, creditCardExpirationDate);
+            bool inputIsValid = theValidation.IsValidCorporateSubscriptionInfo(contactName, jobTitle, address, emailAddress, phoneNumber, numberOfCopies,
+                startDate, duration);
 
 
             ErrorMessage += theValidation.ErrorMessagesToString().ToString();
@@ -125,17 +119,14 @@ namespace SportzMagazine.ViewModels
 
                 //Create new subscription
                 Subscription s1 = Sc1.CreateNewSubscription(
-                    name,
+                    contactName,
+                    jobTitle,
                     address,
                     emailAddress,
                     phoneNumber,
                     numberOfCopies,
                     startDate,
-                    expirationDate,
-                    creditCardType,
-                    creditCardHolderName,
-                    creditCardNumber,
-                    creditCardExpirationDate);
+                    expirationDate);
 
 
                 //If Subscription is not in the list ("Contains" not working). Probably because it checks for reference equality instead of value equality
@@ -227,17 +218,17 @@ namespace SportzMagazine.ViewModels
         public string ErrorMessage { get { return _errorMessage; } set { _errorMessage = value; OnPropertyChanged("ErrorMessage"); } }
 
 
-        public string Name
+        public string ContactName
         {
             get
             {
-                return _name;
+                return _contactName;
             }
 
 
             set
             {
-                _name = value;
+                _contactName = value;
                 OnPropertyChanged("Address");
             }
         }
@@ -342,71 +333,6 @@ namespace SportzMagazine.ViewModels
             }
         }
 
-
-        public string CreditCardType
-        {
-            get
-            {
-                return _creditCardType;
-            }
-
-
-            set
-            {
-                _creditCardType = value;
-                OnPropertyChanged("CreditCardType");
-            }
-        }
-
-
-        public string CreditCardHolderName
-        {
-            get
-            {
-                return _creditCardHolderName;
-            }
-
-
-            set
-            {
-                _creditCardHolderName = value;
-                OnPropertyChanged("CreditCardHolderName");
-            }
-        }
-
-
-        public string CreditCardNumber
-        {
-            get
-            {
-                return _creditCardNumber;
-            }
-
-
-            set
-            {
-                _creditCardNumber = value;
-                OnPropertyChanged("CreditCardNumber");
-            }
-        }
-
-
-        public DateTime CreditCardExpirationDate
-        {
-            get
-            {
-                return _creditCardExpirationDate;
-            }
-
-
-            set
-            {
-                _creditCardExpirationDate = value;
-                OnPropertyChanged("CreditCardExpirationDate");
-            }
-        }
-
-
         public string EmailAddress
         {
             get
@@ -422,6 +348,7 @@ namespace SportzMagazine.ViewModels
             }
         }
 
+        public string JobTitle { get { return _jobTitle; } set { _jobTitle = value; OnPropertyChanged("JobTitle"); } }
 
         #endregion
     }

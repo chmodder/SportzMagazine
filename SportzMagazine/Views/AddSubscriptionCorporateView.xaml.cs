@@ -20,20 +20,11 @@ namespace SportzMagazine.Views
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class SubscriptionTypeSelectorView : Page
+    public sealed partial class AddSubscriptionCorporateView : Page
     {
-        public SubscriptionTypeSelectorView()
+        public AddSubscriptionCorporateView()
         {
             this.InitializeComponent();
-        }
-
-        private void SelectIndividualBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(AddSubscriptionIndividualView));
-        }
-        private void SelectCorporateBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-            Frame.Navigate(typeof(AddSubscriptionCorporateView));
         }
     }
 }

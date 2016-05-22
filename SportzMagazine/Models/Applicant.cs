@@ -10,6 +10,7 @@ namespace SportzMagazine.Models
 {
     [XmlInclude(typeof(Applicant))]
     [XmlInclude(typeof(IndividualApplicant))]
+    [XmlInclude(typeof(CorporateApplicant))]
     public class Applicant
     {
         private string _address;

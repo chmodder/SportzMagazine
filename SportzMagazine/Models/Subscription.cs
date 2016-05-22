@@ -9,6 +9,7 @@ namespace SportzMagazine.Models
 {
     [XmlInclude(typeof(Subscription))]
     [XmlInclude(typeof(IndividualSubscription))]
+    [XmlInclude(typeof(CorporateSubscription))]
     public class Subscription
     {
         private int _numberOfCopies;

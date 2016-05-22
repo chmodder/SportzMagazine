@@ -52,6 +52,21 @@ namespace SportzMagazine.Catalogs
         #endregion
 
         #region methods
+        /// <summary>
+        /// Creates IndividualSubscription
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="address"></param>
+        /// <param name="emailAddress"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="numberOfCopies"></param>
+        /// <param name="startDate"></param>
+        /// <param name="expirationDate"></param>
+        /// <param name="creditCardType"></param>
+        /// <param name="creditCardHolderName"></param>
+        /// <param name="creditCardNumber"></param>
+        /// <param name="creditCardExpirationDate"></param>
+        /// <returns></returns>
         public Subscription CreateNewSubscription(
             string name,
             string address,
@@ -75,6 +90,45 @@ namespace SportzMagazine.Catalogs
 
             //Create new IndividualSubscription object and adds it to the Subscription list
             IndividualSubscription s1 = new IndividualSubscription(a1, numberOfCopies, startDate, expirationDate);
+            SubscriptionList.Add(s1);
+
+            //returns the Subscription object to the ViewModel's AddNewSubscription method from where it was invoked
+            return s1;
+        }
+
+
+        /// <summary>
+        /// Creates CorporateSubscription
+        /// </summary>
+        /// <param name="contactName"></param>
+        /// <param name="jobTitle"></param>
+        /// <param name="address"></param>
+        /// <param name="emailAddress"></param>
+        /// <param name="phoneNumber"></param>
+        /// <param name="numberOfCopies"></param>
+        /// <param name="startDate"></param>
+        /// <param name="expirationDate"></param>
+        /// <returns></returns>
+        public Subscription CreateNewSubscription(
+            string contactName,
+            string jobTitle,
+            string address,
+            string emailAddress,
+            string phoneNumber,
+            int numberOfCopies,
+            DateTime startDate,
+            DateTime expirationDate)
+        {
+            //Creates new instances of the Applicant and Subscription lists
+            SubscriptionList = new List<Subscription>();
+            ApplicantList = new List<Applicant>();
+
+            //Create new IndividualApplicant object and adds it to the Applicant list
+            CorporateApplicant a1 = new CorporateApplicant(contactName, jobTitle, address, emailAddress, phoneNumber);
+            ApplicantList.Add(a1);
+
+            //Create new IndividualSubscription object and adds it to the Subscription list
+            CorporateSubscription s1 = new CorporateSubscription(a1, numberOfCopies, startDate, expirationDate);
             SubscriptionList.Add(s1);
 
             //returns the Subscription object to the ViewModel's AddNewSubscription method from where it was invoked
@@ -121,28 +175,28 @@ namespace SportzMagazine.Catalogs
                 }
             }
 
-            #region Corporate subscription (Not done yet, project is also missing Corporate class for now)
-            ////if newSubscription is a corporate subscription check if newSubscription proprties match an item in the subscriptionList
-            //else if (newSubscription.GetType() == typeof(CorporateSubscription))
-            //{
-            //    CorporateSubscription theSubscription = (CorporateSubscription)newSubscription;
+            #region Corporate subscription
+            //if newSubscription is a corporate subscription check if newSubscription proprties match an item in the subscriptionList
+            else if (newSubscription.GetType() == typeof(CorporateSubscription))
+            {
+                CorporateSubscription theSubscription = (CorporateSubscription)newSubscription;
 
-            //    for (int i = 0; i < subscriptionList.Count(); i++)
-            //    {
-            //        if (subscriptionList[i].GetType() == typeof(CorporateSubscription))
-            //        {
-            //            CorporateSubscription item = (CorporateSubscription)subscriptionList[i];
+                for (int i = 0; i < subscriptionList.Count(); i++)
+                {
+                    if (subscriptionList[i].GetType() == typeof(CorporateSubscription))
+                    {
+                        CorporateSubscription item = (CorporateSubscription)subscriptionList[i];
 
-            //            if (item.TheCorporateApplicant.Name == theSubscription.TheCorporateApplicant.Name)
-            //            {
-            //                alreadyExist = true;
-            //                return alreadyExist;
-            //            }
-            //        }
-            //    }
-            //}
+                        if (item.TheCorporateApplicant.ContactName == theSubscription.TheCorporateApplicant.ContactName)
+                        {
+                            alreadyExist = true;
+                            return alreadyExist;
+                        }
+                    }
+                }
+            }
             #endregion
-            
+
             return alreadyExist;
         }
         #endregion
