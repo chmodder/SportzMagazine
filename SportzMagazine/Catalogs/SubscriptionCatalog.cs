@@ -169,7 +169,6 @@ namespace SportzMagazine.Catalogs
                         if (item.TheIndividualApplicant.Name == theSubscription.TheIndividualApplicant.Name)
                         {
                             alreadyExist = true;
-                            return alreadyExist;
                         }
                     }
                 }
@@ -190,7 +189,6 @@ namespace SportzMagazine.Catalogs
                         if (item.TheCorporateApplicant.ContactName == theSubscription.TheCorporateApplicant.ContactName)
                         {
                             alreadyExist = true;
-                            return alreadyExist;
                         }
                     }
                 }

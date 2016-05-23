@@ -1,7 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace SportzMagUnitTest
+namespace SportzMagazineTest
 {
     [TestClass]
     public class UnitTest1
