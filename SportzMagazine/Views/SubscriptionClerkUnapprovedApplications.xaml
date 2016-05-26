@@ -1,0 +1,164 @@
+﻿<Page
+    x:Class="SportzMagazine.Views.SubscriptionClerkUnapprovedApplications"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SportzMagazine.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:SportzMagazine.ViewModels"
+    xmlns:data="using:SportzMagazine.Models"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <vm:SubscriptionClerkUnapprovedApplicationsViewModel/>
+    </Page.DataContext>
+    <Page.Resources>
+        <data:IndividualSubscription x:Key="IndividualSubscription"/>
+        <CollectionViewSource x:Name="SubscriptionCollection" Source="{Binding SubscriptionList}"/>
+    </Page.Resources>
+
+
+
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel x:Name="StackPnlPageHeader" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
+            <TextBlock Text="Subcription Clerk" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
+            <TextBlock Text="Unapproved Applications" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
+        </StackPanel>
+
+
+        <ScrollViewer Grid.Row="1" Grid.Column="0" x:Name="PnlIndividualSubscriptionList">
+            <ListView SelectedItem="hello" x:Name="MyListView" ItemsSource="{Binding Source={StaticResource SubscriptionCollection}}" Foreground="Red" Margin="0,0,10,0">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="data:IndividualSubscription">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#59259;"/>
+                            <TextBlock Text="{x:Bind TheIndividualApplicant.Name}" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel x:Name="PnlIndividualApplicantInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
+                    <Rectangle Fill="#FFFF0202" Height="10"/>
+                    <TextBlock Text="Personal details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+                    <StackPanel Padding="5">
+                        <TextBlock Text="{Binding TheIndividualApplicant.Name}"/>
+                        <TextBlock Text="{Binding TheIndividualApplicant.Address}"/>
+                        <TextBlock Text="{Binding TheIndividualApplicant.PhoneNumber}"/>
+                        <TextBlock Text="{Binding TheIndividualApplicant.EmailAddress}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="PnlIndividualSubscriptionInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
+                    <Rectangle Fill="#FFFF0202" Height="10"/>                       
+                    <TextBlock Text="Subscription details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+
+                    <StackPanel Padding="5">
+                        <TextBlock Text="{Binding ExpirationDate}"/>
+                        <TextBlock Text="{Binding StartDate}"/>
+                        <TextBlock Text="{Binding NumberOfCopies}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="PnlCreditCardInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
+                    <Rectangle Fill="#FFFF0202" Height="10"/>
+                    <TextBlock Text="Credit card details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+                    <StackPanel Padding="5">
+                        <ListView x:Name="LvCreditCards" ItemsSource="{Binding TheIndividualApplicant.CreditCardList}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding CardHolderName}"/>
+                                        <TextBlock Text="{Binding CardType}"/>
+                                        <TextBlock Text="{Binding CardNumber}"/>
+                                        <TextBlock Text="{Binding ExpirationDate}"/>
+                                        <!--<TextBlock Text="{Binding TheIndividualApplicant.CreditCard}"/>-->
+                                        <!--<TextBlock Text="{Binding TheIndividualApplicant}"/>-->
+                                        <Button Content="Verify card" Command="{Binding VerdifyCreditCardCommand, ElementName=LvCreditCards}" CommandParameter="{Binding}">
+                      
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                    </StackPanel>
+                </StackPanel>
+
+            </Grid>
+        </StackPanel>
+
+
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="WindowStates">
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="800"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.Row)" Value="0"/>
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.Column)" Value="0"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.Row)" Value="0"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.Column)" Value="1"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.Column)" Value="2"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.Row)" Value="0"/>
+
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.ColumnSpan)" Value="1"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.ColumnSpan)" Value="1"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.Row)" Value="0"/>
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.Column)" Value="0"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.Row)" Value="1"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.Column)" Value="0"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.Column)" Value="0"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.Row)" Value="2"/>
+
+                        <Setter Target="PnlIndividualApplicantInfo.(Grid.ColumnSpan)" Value="3"/>
+                        <Setter Target="PnlIndividualSubscriptionInfo.(Grid.ColumnSpan)" Value="3"/>
+                        <Setter Target="PnlCreditCardInfo.(Grid.ColumnSpan)" Value="3"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+    </Grid>
+</Page>
+

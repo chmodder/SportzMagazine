@@ -101,9 +101,11 @@
     <Compile Include="Helpers\NumberConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Serialization.cs" />
+    <Compile Include="Helpers\SimulatedPaymentSystem.cs" />
     <Compile Include="Models\Applicant.cs" />
     <Compile Include="Models\CorporateApplicant.cs" />
     <Compile Include="Models\CorporateSubscription.cs" />
+    <Compile Include="Models\EmailApproval.cs" />
     <Compile Include="ViewModels\AddSubscriptionCorporateViewModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Models\CreditCard.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AddSubscriptionIndividualViewModel.cs" />
+    <Compile Include="ViewModels\SubscriptionClerkUnapprovedApplicationsViewModel.cs" />
     <Compile Include="Views\AddSubscriptionCorporateView.xaml.cs">
       <DependentUpon>AddSubscriptionCorporateView.xaml</DependentUpon>
     </Compile>
@@ -123,6 +126,15 @@
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriptionClerkApprovedApplications.xaml.cs">
+      <DependentUpon>SubscriptionClerkApprovedApplications.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriptionClerkOptionsView.xaml.cs">
+      <DependentUpon>SubscriptionClerkOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubscriptionClerkUnapprovedApplications.xaml.cs">
+      <DependentUpon>SubscriptionClerkUnapprovedApplications.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SubscriptionTypeSelectorView.xaml.cs">
       <DependentUpon>SubscriptionTypeSelectorView.xaml</DependentUpon>
@@ -173,6 +185,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriptionClerkApprovedApplications.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriptionClerkOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubscriptionClerkUnapprovedApplications.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
