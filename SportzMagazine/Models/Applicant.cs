@@ -29,7 +29,6 @@ namespace SportzMagazine.Models
             this.PhoneNumber = phoneNumber;
         }
 
-
         public string Address { get { return _address; } set { _address = value; } }
 
         public string EmailAddress { get { return _emailAddress; } set { _emailAddress = value; } }

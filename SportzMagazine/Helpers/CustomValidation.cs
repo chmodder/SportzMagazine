@@ -126,6 +126,7 @@ namespace SportzMagazine.Helpers
             return result;
         }
         
+
         public StringBuilder ErrorMessagesToString()
         {
             //Creates the string which should contain all items in the ErrorMessageList
