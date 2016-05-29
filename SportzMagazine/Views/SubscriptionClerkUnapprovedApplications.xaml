@@ -14,7 +14,7 @@
     </Page.DataContext>
     <Page.Resources>
         <data:IndividualSubscription x:Key="IndividualSubscription"/>
-        <CollectionViewSource x:Name="SubscriptionCollection" Source="{Binding SubscriptionList}"/>
+        <CollectionViewSource x:Name="SubscriptionCollection" Source="{Binding IndividualSubscriptionList}"/>
     </Page.Resources>
 
 
@@ -26,7 +26,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -35,17 +35,17 @@
         <StackPanel x:Name="StackPnlPageHeader" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,10">
             <TextBlock Text="Subcription Clerk" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <TextBlock Text="Unapproved Applications" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
+            <TextBlock Text="{Binding UserNotification}" Style="{StaticResource CaptionTextBlockStyle}" FontStyle="Italic" Foreground="Red"/>
         </StackPanel>
 
 
         <ScrollViewer Grid.Row="1" Grid.Column="0" x:Name="PnlIndividualSubscriptionList">
-            <ListView SelectedItem="hello" x:Name="MyListView" ItemsSource="{Binding Source={StaticResource SubscriptionCollection}}" Foreground="Red" Margin="0,0,10,0">
-
+            <ListView x:Name="MyListView" ItemsSource="{Binding Source={StaticResource SubscriptionCollection}}" Foreground="Red" Margin="0,0,10,0">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="data:IndividualSubscription">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#59259;"/>
-                            <TextBlock Text="{x:Bind TheIndividualApplicant.Name}" Margin="10,0,0,0"/>
+                            <TextBlock Text="{Binding TheIndividualApplicant.Name}" Margin="10,0,0,0"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -71,48 +71,54 @@
                 <StackPanel x:Name="PnlIndividualApplicantInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
                     <Rectangle Fill="#FFFF0202" Height="10"/>
                     <TextBlock Text="Personal details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+
                     <StackPanel Padding="5">
                         <TextBlock Text="{Binding TheIndividualApplicant.Name}"/>
                         <TextBlock Text="{Binding TheIndividualApplicant.Address}"/>
                         <TextBlock Text="{Binding TheIndividualApplicant.PhoneNumber}"/>
                         <TextBlock Text="{Binding TheIndividualApplicant.EmailAddress}"/>
                     </StackPanel>
+
+
                 </StackPanel>
 
                 <StackPanel x:Name="PnlIndividualSubscriptionInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
-                    <Rectangle Fill="#FFFF0202" Height="10"/>                       
+                    <Rectangle Fill="#FFFF0202" Height="10"/>
                     <TextBlock Text="Subscription details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+
 
                     <StackPanel Padding="5">
                         <TextBlock Text="{Binding ExpirationDate}"/>
                         <TextBlock Text="{Binding StartDate}"/>
                         <TextBlock Text="{Binding NumberOfCopies}"/>
                     </StackPanel>
+
+
                 </StackPanel>
 
-                <StackPanel x:Name="PnlCreditCardInfo" DataContext="{Binding Source={StaticResource SubscriptionCollection}}" Margin="10,0,10,0">
-                    <Rectangle Fill="#FFFF0202" Height="10"/>
-                    <TextBlock Text="Credit card details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
-                    <StackPanel Padding="5">
-                        <ListView x:Name="LvCreditCards" ItemsSource="{Binding TheIndividualApplicant.CreditCardList}">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding CardHolderName}"/>
-                                        <TextBlock Text="{Binding CardType}"/>
-                                        <TextBlock Text="{Binding CardNumber}"/>
-                                        <TextBlock Text="{Binding ExpirationDate}"/>
-                                        <!--<TextBlock Text="{Binding TheIndividualApplicant.CreditCard}"/>-->
-                                        <!--<TextBlock Text="{Binding TheIndividualApplicant}"/>-->
-                                        <Button Content="Verify card" Command="{Binding VerdifyCreditCardCommand, ElementName=LvCreditCards}" CommandParameter="{Binding}">
-                      
-                                        </Button>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
+                <StackPanel x:Name="PnlCreditCardInfo" Margin="10,0,10,0">
+                    <StackPanel DataContext="{Binding Source={StaticResource SubscriptionCollection}}">
+                        <Rectangle Fill="#FFFF0202" Height="10"/>
+                        <TextBlock Text="Credit card details" Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
 
-                        </ListView>
+                        <StackPanel Padding="5">
+                            <ListView x:Name="LvCreditCards" ItemsSource="{Binding TheIndividualApplicant.CreditCardList}" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="data:CreditCard">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding CardHolderName}"/>
+                                            <TextBlock Text="{Binding CardType}"/>
+                                            <TextBlock Text="{Binding CardNumber}"/>
+                                            <TextBlock Text="{Binding ExpirationDate}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+
+
                     </StackPanel>
+                    <Button x:Name="BtnVerifyCreditCard" Content="Verify card" Command="{Binding VerifyCreditCardCommand}" CommandParameter="{Binding SelectedItem, ElementName=LvCreditCards}"/>
                 </StackPanel>
 
             </Grid>

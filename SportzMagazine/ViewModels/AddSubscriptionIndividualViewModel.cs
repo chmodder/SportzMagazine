@@ -66,7 +66,7 @@ namespace SportzMagazine.ViewModels
             ErrorMessage = "";
 
 
-
+            // Should probably delete this part and use properties directly
             string name = Name;
             string address = Address;
             string emailAddress = EmailAddress;
