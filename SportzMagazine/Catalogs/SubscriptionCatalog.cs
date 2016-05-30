@@ -1,10 +1,12 @@
 ﻿using SportzMagazine.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using SportzMagazine.Helpers;
 
 namespace SportzMagazine.Catalogs
 {
@@ -14,6 +16,7 @@ namespace SportzMagazine.Catalogs
         #region Instance Fields
         private List<Subscription> _subscriptionList;
         private List<Applicant> _applicantList;
+        private string _subscriptionListFileName = "Subscriptions.xml";
         #endregion
 
         #region Properties
@@ -42,12 +45,26 @@ namespace SportzMagazine.Catalogs
                 _applicantList = value;
             }
         }
+
+        public string SubscriptionListFileName
+        {
+            get { return _subscriptionListFileName; }
+            set { _subscriptionListFileName = value; }
+        }
+
         #endregion
 
         #region Constructors
         public SubscriptionCatalog()
         {
             //This is PARAMETERLESS constructor is required by the XMLSerializeer
+
+            //Creates new instances of the Applicant and Subscription lists
+            SubscriptionList = new List<Subscription>();
+            ApplicantList = new List<Applicant>();
+
+            ////Loads the List/deserialization
+            //LoadSubscriptionData();
         }
         #endregion
 
@@ -80,17 +97,13 @@ namespace SportzMagazine.Catalogs
             string creditCardNumber,
             DateTime creditCardExpirationDate)
         {
-            //Creates new instances of the Applicant and Subscription lists
-            SubscriptionList = new List<Subscription>();
-            ApplicantList = new List<Applicant>();
-
+            
             //Create new IndividualApplicant object and adds it to the Applicant list
             IndividualApplicant a1 = new IndividualApplicant(name, address, emailAddress, phoneNumber, creditCardType, creditCardHolderName, creditCardNumber, creditCardExpirationDate);
             ApplicantList.Add(a1);
 
             //Create new IndividualSubscription object and adds it to the Subscription list
             IndividualSubscription s1 = new IndividualSubscription(a1, numberOfCopies, startDate, expirationDate);
-            SubscriptionList.Add(s1);
 
             //returns the Subscription object to the ViewModel's AddNewSubscription method from where it was invoked
             return s1;
@@ -119,36 +132,105 @@ namespace SportzMagazine.Catalogs
             DateTime startDate,
             DateTime expirationDate)
         {
-            //Creates new instances of the Applicant and Subscription lists
-            SubscriptionList = new List<Subscription>();
-            ApplicantList = new List<Applicant>();
+            
 
             //Create new IndividualApplicant object and adds it to the Applicant list
             CorporateApplicant a1 = new CorporateApplicant(contactName, jobTitle, address, emailAddress, phoneNumber);
             ApplicantList.Add(a1);
 
-            //Create new IndividualSubscription object and adds it to the Subscription list
+            //Create new IndividualSubscription object
             CorporateSubscription s1 = new CorporateSubscription(a1, numberOfCopies, startDate, expirationDate);
-            SubscriptionList.Add(s1);
 
             //returns the Subscription object to the ViewModel's AddNewSubscription method from where it was invoked
             return s1;
         }
 
-        #region Static methods
+        public void AddSubscriptionToCatalog(Subscription subscription)
+        {
+            SubscriptionList.Add(subscription);
+        }
+
+        public async void LoadSubscriptionData()
+        {
+
+            //Creates in instance of the serialization class and sets the filename
+            Serialization readFile = new Serialization(SubscriptionListFileName);
+
+
+            //Sets read from file task up, which should return an ObservableCollection value
+            Task<ObservableCollection<Subscription>> myTask = readFile.LoadSubscriptionsFromXmlAsync();
+
+
+            //this might need some refatoring and cleanup - this line is needed to run the task and receive a result
+            var result = await myTask;
+
+
+            //Load and set the SubscriptionList value from file if it exists - Should only add Task.Result() to SubscriptionList if file exists
+            if (myTask.IsCompleted)
+            {
+                //Adds file data (which are previous Subscriptions) to the ObservableCollection
+                SubscriptionList = ObservableCollectionToListConverter(myTask.Result);
+            }
+        }
+
+        public void SaveSubscriptionData()
+        {
+            //Creates Serialization object
+            Serialization writeFile = new Serialization(SubscriptionListFileName);
+            //Serialization object save the updated Subscription List to a file
+            writeFile.SaveSubscriptionsAsXmkAsync(ListToObservableCollectionConverter(SubscriptionList));
+        }
+
+
+
+        #region converters
+
+        //might move these converter methods to a helper class later when cleaning and refactoring
+        public List<Subscription> ObservableCollectionToListConverter(ObservableCollection<Subscription> theSubscriptionObservableCollection)
+        {
+            List<Subscription> theSubscriptionList = new List<Subscription>();
+
+            if (theSubscriptionObservableCollection.Count > 0)
+            {
+                foreach (Subscription subscription in theSubscriptionObservableCollection)
+                {
+                    theSubscriptionList.Add(subscription);
+                }
+            }
+            return theSubscriptionList;
+        }
+
+
+        public ObservableCollection<Subscription> ListToObservableCollectionConverter(List<Subscription> theSubscriptionList )
+        {
+            ObservableCollection<Subscription> theSubscriptionObservableCollection = new ObservableCollection<Subscription>();
+
+            if (theSubscriptionList.Count > 0)
+            {
+                foreach (Subscription subscription in theSubscriptionList)
+                {
+                    theSubscriptionObservableCollection.Add(subscription);
+                }
+            }
+
+            return theSubscriptionObservableCollection;
+
+        }
+        #endregion
+
         /// <summary>
         /// Checks if a Subscription object is inside a List of Subscriptions
         /// </summary>
         /// <param name="newSubscription"></param>
         /// <param name="subscriptionList"></param>
         /// <returns></returns>
-        internal static bool IsInSubscriptionList(Subscription newSubscription, List<Subscription> subscriptionList)
+        public bool IsInSubscriptionList(Subscription newSubscription)
         {
             //sets the default return value
             bool alreadyExist = false;
 
             //checks if input arguments are null and returns false if thats the case, because comparision of null values are not
-            if (newSubscription == null || subscriptionList == null)
+            if (newSubscription == null || SubscriptionList == null)
             {
                 return alreadyExist;
             }
@@ -158,12 +240,12 @@ namespace SportzMagazine.Catalogs
             {
                 IndividualSubscription theSubscription = (IndividualSubscription)newSubscription;
 
-                for (int i = 0; i < subscriptionList.Count(); i++)
+                for (int i = 0; i < SubscriptionList.Count(); i++)
                 {
-                    if (subscriptionList[i].GetType() == typeof(IndividualSubscription))
+                    if (SubscriptionList[i].GetType() == typeof(IndividualSubscription))
                     {
                         //casts the subscriptionList item to IndividualSubscription
-                        IndividualSubscription item = (IndividualSubscription)subscriptionList[i];
+                        IndividualSubscription item = (IndividualSubscription)SubscriptionList[i];
 
                         //if object-properties values are the same, we assume the objects are the same (more properties should probably be checked), and return true because the object is in the list
                         if (item.TheIndividualApplicant.Name == theSubscription.TheIndividualApplicant.Name)
@@ -180,11 +262,11 @@ namespace SportzMagazine.Catalogs
             {
                 CorporateSubscription theSubscription = (CorporateSubscription)newSubscription;
 
-                for (int i = 0; i < subscriptionList.Count(); i++)
+                for (int i = 0; i < SubscriptionList.Count(); i++)
                 {
-                    if (subscriptionList[i].GetType() == typeof(CorporateSubscription))
+                    if (SubscriptionList[i].GetType() == typeof(CorporateSubscription))
                     {
-                        CorporateSubscription item = (CorporateSubscription)subscriptionList[i];
+                        CorporateSubscription item = (CorporateSubscription)SubscriptionList[i];
 
                         if (item.TheCorporateApplicant.ContactName == theSubscription.TheCorporateApplicant.ContactName)
                         {
@@ -197,7 +279,6 @@ namespace SportzMagazine.Catalogs
 
             return alreadyExist;
         }
-        #endregion
 
         #endregion
     }

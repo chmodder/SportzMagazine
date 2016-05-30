@@ -26,9 +26,6 @@ namespace SportzMagazine.ViewModels
 
         public SubscriptionClerkUnapprovedApplicationsViewModel()
         {
-
-            SubscriptionList = new ObservableCollection<Subscription>();
-
             #region Dummy data
             ////test (create some dummy data)
             //IndividualApplicant individualApplicant1 = new IndividualApplicant("harry", "somewhere street", "harry@mail.com", "12345678", "visa", "Harry CC name", "1234567812345678", DateTime.Today.AddMonths(2));
@@ -50,12 +47,13 @@ namespace SportzMagazine.ViewModels
             //Create new subscription catalog
             TheSubscriptionCatalog = new SubscriptionCatalog();
 
-
+            SubscriptionList = new ObservableCollection<Subscription>();
+            
             //create new Relay command for Verify CreditCard button
             VerifyCreditCardCommand = new RelayCommand(VerifyCreditCard);
 
             //Load SubscriptionData from file
-            LoadSubscriptionData(FileName);
+            TheSubscriptionCatalog.LoadSubscriptionData();
 
             //Filter Individual subscriptions
             IndividualSubscriptionList = FilterIndividualSubscriptions();
@@ -76,27 +74,6 @@ namespace SportzMagazine.ViewModels
             return theIndividualSubscriptions;
         }
 
-        private async void LoadSubscriptionData(string fileName)
-        {
-            //Creates in instance of the serialization class and sets the filename
-            Serialization readFile = new Serialization(FileName);
-
-
-            //Sets read from file task up, which should return an ObservableCollection value
-            Task<ObservableCollection<Subscription>> myTask = readFile.LoadSubscriptionsFromXmlAsync();
-
-
-            //this might need some refatoring and cleanup - this line is needed to run the task and receive a result
-            var result = await myTask;
-
-
-            //Load and set the SubscriptionList value from file if it exists - Should only add Task.Result() to SubscriptionList if file exists
-            if (myTask.IsCompleted)
-            {
-                //Adds file data (which are previous Subscriptions) to the ObservableCollection
-                SubscriptionList = myTask.Result;
-            }
-        }
 
         #region methods
         private void VerifyCreditCard(object obj)
@@ -107,7 +84,7 @@ namespace SportzMagazine.ViewModels
             {
                 //Verify the card
                 string test = obj.GetType().ToString();
-
+                UserNotification = "<Should say verified depending on return value>";
             }
             else
             {
@@ -119,8 +96,15 @@ namespace SportzMagazine.ViewModels
         #region Properties
         public ObservableCollection<Subscription> SubscriptionList
         {
-            get { return _subscriptionList; }
-            set { _subscriptionList = value; OnPropertyChanged("SubscriptionList"); }
+            get { return TheSubscriptionCatalog.ListToObservableCollectionConverter(TheSubscriptionCatalog.SubscriptionList); }
+            set
+            {
+                if (value != null)
+                {
+                    TheSubscriptionCatalog.SubscriptionList = TheSubscriptionCatalog.ObservableCollectionToListConverter(value);
+                    OnPropertyChanged("SubscriptionList");
+                }
+            }
         }
 
         public RelayCommand VerifyCreditCardCommand

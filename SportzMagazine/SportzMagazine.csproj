@@ -96,12 +96,14 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Catalogs\SubscriptionCatalog.cs" />
+    <Compile Include="Helpers\CorporateSubscriptionTypeConverter.cs" />
     <Compile Include="Helpers\CustomValidation.cs" />
     <Compile Include="Helpers\DateTimeToDateTimeOffsetConverter.cs" />
     <Compile Include="Helpers\NumberConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Serialization.cs" />
     <Compile Include="Helpers\SimulatedPaymentSystem.cs" />
+    <Compile Include="Helpers\IndividualSubscriptionTypeConverter.cs" />
     <Compile Include="Models\Applicant.cs" />
     <Compile Include="Models\CorporateApplicant.cs" />
     <Compile Include="Models\CorporateSubscription.cs" />

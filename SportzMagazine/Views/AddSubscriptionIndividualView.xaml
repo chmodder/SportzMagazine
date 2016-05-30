@@ -35,7 +35,7 @@
         <StackPanel Grid.Row="0">
             <TextBlock Text="Subscribe Individual" HorizontalAlignment="Center" Style="{ThemeResource TitleTextBlockStyle}"/>
             <TextBlock Text="Enter your information and submit" HorizontalAlignment="Center" Style="{StaticResource SubtitleTextBlockStyle}"/>
-            <TextBlock Text="{Binding ErrorMessage, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaptionTextBlockStyle}" FontStyle="Italic" Foreground="Red"/>
+            <TextBlock Text="{Binding NotificationMessage, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource CaptionTextBlockStyle}" FontStyle="Italic" Foreground="Red"/>
         </StackPanel>
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -135,10 +135,8 @@
 
                 <StackPanel x:Name="SubmittedInfoPnl" Padding="5">
                     <TextBlock Text="Submitted info" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                    <ListView x:Name="SubmittedInfoLw" ItemsSource="{Binding SubscriptionList}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="data:IndividualSubscription">
-                                <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Vertical" DataContext="{Binding SubmittedSubscriptionInfo}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="Full Name: "/>
                                         <TextBlock Text="{Binding TheIndividualApplicant.Name}"/>
@@ -192,9 +190,7 @@
                                         </ListView.ItemTemplate>
                                     </ListView>
                                 </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+
                 </StackPanel>
             </Grid>
         </ScrollViewer>
