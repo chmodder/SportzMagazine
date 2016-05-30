@@ -173,6 +173,31 @@ namespace SportzMagazine.Catalogs
             }
         }
 
+        public async void LoadSubscriptionDataAlternate()
+        {
+
+            //Creates in instance of the serialization class and sets the filename
+            Serialization readFile = new Serialization(SubscriptionListFileName);
+
+
+            //Sets read from file task up, which should return an ObservableCollection value
+            Task<ObservableCollection<Subscription>> myTask = readFile.LoadSubscriptionsFromXmlAsync();
+
+
+            //this might need some refatoring and cleanup - this line is needed to run the task and receive a result
+            var result = await myTask;
+
+
+            //Load and set the SubscriptionList value from file if it exists - Should only add Task.Result() to SubscriptionList if file exists
+            if (myTask.IsCompleted)
+            {
+                //Adds file data (which are previous Subscriptions) to the ObservableCollection
+                SubscriptionList = ObservableCollectionToListConverter(myTask.Result);
+            }
+        }
+
+
+
         public void SaveSubscriptionData()
         {
             //Creates Serialization object

@@ -18,6 +18,8 @@ namespace SportzMagazine.ViewModels
         private string _userNotification;
         private ObservableCollection<Subscription> _subscriptionList;
         private ObservableCollection<IndividualSubscription> _individualSubscriptionList;
+        private CreditCard _theCreditCard;
+        private IndividualSubscription _selectedIndividualSubscription;
         private SubscriptionCatalog _theSubscriptionCatalog;
         private RelayCommand _verifyCreditCardCommand;
         private const string FileName = "Subscriptions.xml";
@@ -55,9 +57,77 @@ namespace SportzMagazine.ViewModels
             //Load SubscriptionData from file
             TheSubscriptionCatalog.LoadSubscriptionData();
 
-            //Filter Individual subscriptions
-            IndividualSubscriptionList = FilterIndividualSubscriptions();
 
+            //Filter Individual subscriptions which are Unapproved
+            IndividualSubscriptionList = FilterUnapprovedIndividualSubscriptions();
+        }
+
+
+        #region methods
+        private void VerifyCreditCard(object obj)
+        {
+            UserNotification = "";
+            //test if obj is null
+            if (obj != null)
+            {
+                //Verify the card
+                
+
+                TheCreditCard = obj as CreditCard;
+
+                bool IsApproved = false;
+
+                //Checks the Individual Supscription list for subscription/applicant containing the selected CreditCard
+                foreach (IndividualSubscription subscription in IndividualSubscriptionList)
+                {
+                    if (subscription.TheIndividualApplicant.CreditCardList.Contains(TheCreditCard))
+                    {
+                        SelectedIndividualSubscription = subscription;
+                        IsApproved = TheCreditCard.SendCreditCardVerification(SelectedIndividualSubscription.AccountNumber,SelectedIndividualSubscription.TheIndividualApplicant.EmailAddress, SelectedIndividualSubscription.StartDate);
+                        break;
+                    }
+                }
+
+                //Updates the Subscription approval status on the Subscription to true if creditcard was approved
+                if (IsApproved)
+                {
+                    foreach (Subscription subscription in SubscriptionList)
+                    {
+                        if (subscription.AccountNumber == SelectedIndividualSubscription.AccountNumber)
+                        {
+                            subscription.IsApproved = true;
+                            TheSubscriptionCatalog.SaveSubscriptionData();
+                            break;
+                        }
+                    }
+                }
+
+
+                //Filter Individual subscriptions which are Unapproved
+                IndividualSubscriptionList = FilterUnapprovedIndividualSubscriptions();
+
+                UserNotification = IsApproved ? "Card has been approved and Subscription status is updated to Approved" : "Card was not approved";
+            }
+            else
+            {
+                UserNotification = "Make a selection before clicking the button";
+            }
+        }
+
+        #region Should maybe put these in a helper class or in the Catalog
+        private ObservableCollection<IndividualSubscription> FilterUnapprovedIndividualSubscriptions()
+        {
+            ObservableCollection<IndividualSubscription> theIndividualSubscriptions = new ObservableCollection<IndividualSubscription>();
+
+            foreach (Subscription subscription in SubscriptionList)
+            {
+                if (subscription.GetType() == typeof(IndividualSubscription) && !subscription.IsApproved)
+                {
+                    
+                    theIndividualSubscriptions.Add(subscription as IndividualSubscription);
+                }
+            }
+            return theIndividualSubscriptions;
         }
 
         private ObservableCollection<IndividualSubscription> FilterIndividualSubscriptions()
@@ -73,24 +143,8 @@ namespace SportzMagazine.ViewModels
             }
             return theIndividualSubscriptions;
         }
+        #endregion
 
-
-        #region methods
-        private void VerifyCreditCard(object obj)
-        {
-            UserNotification = "";
-            //test if obj is null
-            if (obj != null)
-            {
-                //Verify the card
-                string test = obj.GetType().ToString();
-                UserNotification = "<Should say verified depending on return value>";
-            }
-            else
-            {
-                UserNotification = "Make a selection before clicking the button";
-            }
-        }
         #endregion
 
         #region Properties
@@ -125,6 +179,14 @@ namespace SportzMagazine.ViewModels
         {
             get { return _individualSubscriptionList; }
             set { _individualSubscriptionList = value; }
+        }
+
+        public CreditCard TheCreditCard { get { return _theCreditCard; } set { _theCreditCard = value; OnPropertyChanged("TheCreditCard"); } }
+
+        public IndividualSubscription SelectedIndividualSubscription
+        {
+            get { return _selectedIndividualSubscription; }
+            set { _selectedIndividualSubscription = value; OnPropertyChanged("SelectedIndividualSubscription"); }
         }
 
         #endregion

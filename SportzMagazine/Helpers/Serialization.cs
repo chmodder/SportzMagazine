@@ -32,16 +32,26 @@ namespace SportzMagazine.Helpers
         //this is invoked in eg. viewmodel save command method before saving the item (because item needs to be added to existing collection)
         public async Task<ObservableCollection<Subscription>> LoadSubscriptionsFromXmlAsync()
         {
-            string subscriptionXmlString = await DeserializeSubscriptionFileAsync(_xmlFileName);
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ObservableCollection<Subscription>));
-            return
-                (ObservableCollection<Subscription>)xmlSerializer.Deserialize(new StringReader(subscriptionXmlString));
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            FileInfo fInfo = new FileInfo($"{storageFolder.Path}\\{_xmlFileName}");
+            if (fInfo.Exists)
+            {
+                string subscriptionXmlString = await DeserializeSubscriptionFileAsync(_xmlFileName);
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(ObservableCollection<Subscription>));
+                return
+                    (ObservableCollection<Subscription>)xmlSerializer.Deserialize(new StringReader(subscriptionXmlString));
+            }
+            else
+            {
+                return new ObservableCollection<Subscription>();
+            }
+
 
         }
 
         private async void SerializeSubscriptionsFileAsync(string subscriptionString, string fileName)
         {
-            StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting );
+            StorageFile localFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(fileName, CreationCollisionOption.ReplaceExisting);
             await FileIO.WriteTextAsync(localFile, subscriptionString);
         }
 
