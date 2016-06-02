@@ -28,38 +28,45 @@ namespace SportzMagazine.ViewModels
 
         public SubscriptionClerkUnapprovedApplicationsViewModel()
         {
-            #region Dummy data
+            #region Dummy data until LoadSubscriptionData() has been fixed
             ////test (create some dummy data)
-            //IndividualApplicant individualApplicant1 = new IndividualApplicant("harry", "somewhere street", "harry@mail.com", "12345678", "visa", "Harry CC name", "1234567812345678", DateTime.Today.AddMonths(2));
-            //IndividualApplicant individualApplicant2 = new IndividualApplicant("Hermoine", "oxford street", "hermoine@mail.com", "12345678", "mastercard", "Hermoine CC name", "1234567812345678", DateTime.Today.AddMonths(6));
+            IndividualApplicant individualApplicant1 = new IndividualApplicant("harry", "somewhere street", "harry@mail.com", "12345678", "visa", "Harry CC name", "1234567812345678", DateTime.Today.AddMonths(2));
+            IndividualApplicant individualApplicant2 = new IndividualApplicant("Hermoine", "oxford street", "hermoine@mail.com", "12345678", "mastercard", "Hermoine CC name", "1234567812345678", DateTime.Today.AddMonths(6));
 
-            //IndividualSubscription individualSubscription1 = new IndividualSubscription(individualApplicant1, 3, DateTime.Today.AddDays(8), DateTime.Today.AddMonths(6));
-            //IndividualSubscription individualSubscription2 = new IndividualSubscription(individualApplicant2, 9, DateTime.Today.AddDays(23), DateTime.Today.AddMonths(12));
+            IndividualSubscription individualSubscription1 = new IndividualSubscription(individualApplicant1, 3, DateTime.Today.AddDays(8), DateTime.Today.AddMonths(6));
+            IndividualSubscription individualSubscription2 = new IndividualSubscription(individualApplicant2, 9, DateTime.Today.AddDays(23), DateTime.Today.AddMonths(12));
 
-            //CorporateApplicant corporateApplicant1 = new CorporateApplicant("mr Anderson", "Piccadilly circus", "bluepill@mail.com", "12345678", "hacker");
-            //CorporateApplicant corporateApplicant2 = new CorporateApplicant("Morpheus", "Baker Street", "redpill@mail.com", "12345678", "mentor");
+            CorporateApplicant corporateApplicant1 = new CorporateApplicant("mr Anderson", "Piccadilly circus", "bluepill@mail.com", "12345678", "hacker");
+            CorporateApplicant corporateApplicant2 = new CorporateApplicant("Morpheus", "Baker Street", "redpill@mail.com", "12345678", "mentor");
 
-            //CorporateSubscription corporateSubscription1 = new CorporateSubscription(corporateApplicant1, 4, DateTime.Today.AddDays(5), DateTime.Today.AddMonths(7));
-            //CorporateSubscription corporateSubscription2 = new CorporateSubscription(corporateApplicant2, 9, DateTime.Today.AddMonths(1), DateTime.Today.AddMonths(13));
+            CorporateSubscription corporateSubscription1 = new CorporateSubscription(corporateApplicant1, 4, DateTime.Today.AddDays(5), DateTime.Today.AddMonths(7));
+            CorporateSubscription corporateSubscription2 = new CorporateSubscription(corporateApplicant2, 9, DateTime.Today.AddMonths(1), DateTime.Today.AddMonths(13));
 
-            ////add dummy data to the new list
-            //SubscriptionList = new ObservableCollection<Subscription>() { individualSubscription1, individualSubscription2 };
-            #endregion
+             #endregion
 
             //Create new subscription catalog
             TheSubscriptionCatalog = new SubscriptionCatalog();
 
             SubscriptionList = new ObservableCollection<Subscription>();
-            
+
             //create new Relay command for Verify CreditCard button
             VerifyCreditCardCommand = new RelayCommand(VerifyCreditCard);
 
-            //Load SubscriptionData from file
-            TheSubscriptionCatalog.LoadSubscriptionData();
+            #region This needs fixing - will use dummy data to present the Subscription Clerk use case (Approve subscription)
+            //Not working unless in debug mode. It seems that LoadSubscriptionData() is not finished before FilterUnapprovedIndividualSubscriptions() runs
+            //The problem is the FilterUnapprovedIndividualSubscriptions() is depending on the data loaded in LoadSubscriptionData()
+            //The result is that it tries to filter an empty list (SubscriptionCatalog.SubscriptionList<Subscription>) because the data has not finished loading. 
 
+            ////Load SubscriptionData from file
+            //TheSubscriptionCatalog.LoadSubscriptionData();
+
+            //add dummy data to the new list until LoadSubscriptionData() has been fixed
+            SubscriptionList = new ObservableCollection<Subscription>() { individualSubscription1, individualSubscription2, corporateSubscription1, corporateSubscription2 };
+            #endregion
 
             //Filter Individual subscriptions which are Unapproved
             IndividualSubscriptionList = FilterUnapprovedIndividualSubscriptions();
+
         }
 
 
@@ -71,7 +78,7 @@ namespace SportzMagazine.ViewModels
             if (obj != null)
             {
                 //Verify the card
-                
+
 
                 TheCreditCard = obj as CreditCard;
 
@@ -83,7 +90,7 @@ namespace SportzMagazine.ViewModels
                     if (subscription.TheIndividualApplicant.CreditCardList.Contains(TheCreditCard))
                     {
                         SelectedIndividualSubscription = subscription;
-                        IsApproved = TheCreditCard.SendCreditCardVerification(SelectedIndividualSubscription.AccountNumber,SelectedIndividualSubscription.TheIndividualApplicant.EmailAddress, SelectedIndividualSubscription.StartDate);
+                        IsApproved = TheCreditCard.SendCreditCardVerification(SelectedIndividualSubscription.AccountNumber, SelectedIndividualSubscription.TheIndividualApplicant.EmailAddress, SelectedIndividualSubscription.StartDate);
                         break;
                     }
                 }
@@ -123,7 +130,7 @@ namespace SportzMagazine.ViewModels
             {
                 if (subscription.GetType() == typeof(IndividualSubscription) && !subscription.IsApproved)
                 {
-                    
+
                     theIndividualSubscriptions.Add(subscription as IndividualSubscription);
                 }
             }
@@ -172,13 +179,13 @@ namespace SportzMagazine.ViewModels
         public SubscriptionCatalog TheSubscriptionCatalog
         {
             get { return _theSubscriptionCatalog; }
-            set { _theSubscriptionCatalog = value; }
+            set { _theSubscriptionCatalog = value; OnPropertyChanged("TheSubscriptionCatalog"); }
         }
 
         public ObservableCollection<IndividualSubscription> IndividualSubscriptionList
         {
             get { return _individualSubscriptionList; }
-            set { _individualSubscriptionList = value; }
+            set { _individualSubscriptionList = value; OnPropertyChanged("IndividualSubscriptionList"); }
         }
 
         public CreditCard TheCreditCard { get { return _theCreditCard; } set { _theCreditCard = value; OnPropertyChanged("TheCreditCard"); } }

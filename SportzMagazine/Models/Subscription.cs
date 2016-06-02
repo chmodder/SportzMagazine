@@ -36,7 +36,7 @@ namespace SportzMagazine.Models
 
         #region Methods
 
-        public void CreateNewAccountNumber()
+        private void CreateNewAccountNumber()
         {
             Guid g = Guid.NewGuid();
 
