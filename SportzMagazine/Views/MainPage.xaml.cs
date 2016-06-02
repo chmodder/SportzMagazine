@@ -52,5 +52,10 @@ namespace SportzMagazine.Views
         {
             MainFrame.Navigate(typeof(SubscriptionTypeSelectorView));
         }
+
+        private void AppBarButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(typeof(SubscriptionClerkOptionsView));
+        }
     }
 }

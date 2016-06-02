@@ -24,7 +24,7 @@
             <!-- http://www.rudyhuyn.com/blog/2015/12/23/display-an-appbarbutton-on-the-left-side-of-a-commandbar/ -->
             <AppBarButton Icon="AddFriend" Label="Subscribe" Click="AppBarSubscribeBtn_Click"  />
             <AppBarButton Icon="Contact" Label="Subscriber" />
-            <AppBarButton Icon="Admin" Label="Subscription Clerk" />
+            <AppBarButton Icon="Admin" Label="Subscription Clerk" Click="AppBarButton_Click" />
         </CommandBar>
     </Page.TopAppBar>
 
